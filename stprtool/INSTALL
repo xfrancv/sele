@@ -1,0 +1,4 @@
+Installation procedure for Linux:
+
+1. run "stprcompile" from the root prior to start using the toolbox
+2. add "run toolboxroot/stprpath;" to your "startup."

@@ -1,0 +1,19 @@
+2017-08-18
+	* implementaiton of regreession trees and gradient boosted reg. trees
+2012-10-18
+	* Implemented svmocas_kernel.m
+	* Functions in ./kernels/ polished to comply with the STPRtool programming conventions.
+2009-08-14
+	* DBL_MAX and INT_MAX removed from bsvm2.c; it caused problems during compilation on
+	some Windows machines.
+2008-12-18  Vojtech Franc
+	* fixed problem with Init_centers in cmeans.m; this argument was ignored; now
+	it is used as the initial solution; pointed out by Sauptik Dhar <dharx007@umn.edu>
+2008-10-21  Vojtech Franc
+	* bsvm2_mec.c and bsvm2.m made more readable. There was a mismatch
+	in the formula for computing Alphas compared to what we have in our paper.
+	Now, it the fomulas in c-code and the paper corespond.
+2008-07-24  Vojtech Franc 
+	* fixed problem with computing radius in minball.m; the bug
+	was pointed out by Daewon Lee <daewon@tuebingen.mpg.de>
+	

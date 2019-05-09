@@ -1,0 +1,72 @@
+DEPENDENCES
+===========
+LIBOCAS requires only standard C libraries. 
+
+
+INSTALL
+=======
+
+Unpack the library to a folder of your choice, jump to the folder and issue 
+
+    make
+
+which should produce
+
+    svmocas         ... standalone application for training binary linear SVM classifiers
+    msvmocas        ... standalone application for training multi-class linear SVM classifiers
+    linclassif      ... implementation of linear classification rule
+    svmocas.so      ... Linux library
+
+In addition, if Matlab mex compiler is in path then the following MEX functions will be generated
+    
+    msvmocas.mexXXX          ... Training multi-class linear SVM classifier
+    msvmocas_light.mexXXX    ... Training multi-class linear SVM classifier from SVM^light file
+    svmocas.mexXXX           ... Training two-class linear SVM classifier
+    svmocas_lbp.mexXXX       ... Training two-class linear SVM classifier for grey-scale images
+    svmocas_light.mexXXX     ... Training two-class linear SVM classifier from SVM^light file
+    linclassif_light.mexXXX  ... Linear classifier loading examples directly form SVM^light file
+
+    compute_auc              ... Computes area under ROC.
+    lbppyr_features.mexXXX   ... Computing LBP feature descriptor for given images.
+
+
+MATLAB
+======
+
+First, CD to the root folder of LIBOCAS and then:
+
+To get list of all implemented functions type 
+  help Contents
+
+Each of the implemented SVM solvers has its detailed help together with a simple example of use, 
+just try
+  help svmocas
+  help svmocas_light
+  help svmocas_lbp
+  help msvmocas
+  help msvmocas_light
+
+To test all implemented SVM solvers type
+    libocas_test
+
+To test SVMOCAS_LBP for training translation invariant image classifiers try
+    svmocas_lbp_example
+
+To get help type 
+    help Content
+    
+
+STANDALONE APPLICATIONS
+=======================
+
+To get help type
+    ./svmocas
+    ./msvmocas
+    ./linclass
+
+
+TROUBLESHOOTING
+===============
+
+Do not hasitate to send us email
+  xfrancv@cmp.felk.cvut.cz

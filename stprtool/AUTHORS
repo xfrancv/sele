@@ -1,0 +1,13 @@
+Spiritual fathers:
+Michail I. Schlesinger <>
+Vaclav Hlavac <>
+
+Desing, implementation and everything else unless said otherwise:
+Vojtech Franc <xfrancv@cmp.felk.cvut.cz>
+
+
+Other contributors:
+Ondrej Fisar <fisar@coma.jilemnice.cz>
+- Extended knnest_mex.c so that it works also with sparse matrices. 
+
+

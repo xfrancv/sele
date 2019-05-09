@@ -1,0 +1,39 @@
+
+
+Programming conventions
+=======================
+
+Class labels
+------------
+Two-class classification methods. The first (positive) class is 
+represented by +1. The negative (second) class by anything else
+than 1. That, is -1 or 2 should work. 
+
+Multiclass labels are represented by natural numbers 1,2,...,maxClass.
+
+
+Variable naming conventions
+----------------------------
+
+Structures     : Model
+Other varibles : N, M, covType
+
+List of frequently used variable names:
+
+X           [N x M] ... feature vectors
+Y or labels [M x 1] ... labels
+
+N / nDim      ... dimension of feature vector; 
+M / nExamples ... number of examples
+
+cov        ... covariance matrix
+meanVec    ... mean vector
+C          ... SVM regularization constant
+kernelName ... string containing kernel name
+kernelArgs ... kernel arguments 
+
+numPos       ... number of positive examples
+numNeg       ... number of negative examples
+priorPos 
+classCondPos 
+classCondNeg
