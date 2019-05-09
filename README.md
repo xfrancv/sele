@@ -7,16 +7,16 @@ Developed and tested in Matlab (R2016a) under Linux Ubuntu 14.04.5 LTS.
 
 # Install
 
-1. Download datasets from UCI repo and libSVM webpage and convert them to MAT file. 
+(1) Download datasets from UCI repo and libSVM webpage and convert them to MAT file. 
 In Matlab issue:
 
-  install_data
+  >> install_data
 
 which downloads raw data and stores them to data/ folder in MAT format.
 This script requires Linux tools: "uncompress, wget, bunzip2, cat". 
 
 
-2. Install MATCONVNET, LIBOCAS and STPRTOOL. This requires the Matlab MEX compiler 
+(2) Install MATCONVNET, LIBOCAS and STPRTOOL. This requires the Matlab MEX compiler 
 to be setup properly. In Matlab run:
 
 >> install_selclassif
