@@ -3,10 +3,16 @@ cd stprtool;
 stprcompile;
 cd ..;
 
+%% libsvm
+cd src/libsvm-3.1/
+mex libsvmread.c
+cd ..
+cd ..
+
 %% compile libocas
-%cd libocas;
-%libocascompile;
-%cd ..;
+cd libocas;
+libocascompile;
+cd ..;
 
 %% Download and compile MATCONVNET toolbox for training NN
 switch hostname
