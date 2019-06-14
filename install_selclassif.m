@@ -1,17 +1,19 @@
 %% compile stprtool
-cd stprtool;
+cd 3rdparty/stprtool;
 stprcompile;
+cd ..;
 cd ..;
 
 %% libsvm
-cd src/libsvm-3.1/
+cd 3rdparty/libsvm-3.1/
 mex libsvmread.c
-cd ..
-cd ..
+cd ..;
+cd ..;
 
 %% compile libocas
-cd libocas;
+cd 3rdparty/libocas;
 libocascompile;
+cd ..;
 cd ..;
 
 %% Download and compile MATCONVNET toolbox for training NN
@@ -40,19 +42,18 @@ end
 
 matlabDir  = ['matconvnet-1.0-beta25' matconvnet_sufix];
 
-% download if needed
+%% download and install MATCONVNET 
 if ~exist( matlabDir )
     untar('http://www.vlfeat.org/matconvnet/download/matconvnet-1.0-beta25.tar.gz');
     system( ['mv matconvnet-1.0-beta25 ' matlabDir]);
 end
 
-
-% Copy customized layers
+% Copy customized layers to MATCONVNET folder
 src = 'src/matlab/*';
 dst = [ matlabDir '/matlab/'];
 copyfile(src, dst,'f');
 
-%
+% compile MATCONVNET
 opts.install.matconvnet_path = [matlabDir '/matlab/vl_setupnn.m'];
 run(opts.install.matconvnet_path) ;
 
