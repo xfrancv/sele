@@ -1,7 +1,7 @@
-results
-data
+icml2019/results
+icml2019/data
+icml2019/figs
 *.mexa64
 *~
 pax_global_header
 matconvnet-1.0-beta25*
-figs
