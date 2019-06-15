@@ -9,7 +9,7 @@ function run_train_msvmlin( dataSet, setting )
 
         case 'zmuv+reg0.1-100'
 
-            Data = load( ['data/' dataSet '.mat'], 'X','Y','Split' );
+            Data = load( ['../data/' dataSet '.mat'], 'X','Y','Split' );
 
             Params = [];
             for C = [0.1 1 10 100]
