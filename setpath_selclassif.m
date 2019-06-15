@@ -4,17 +4,17 @@ function setup_matconvnet(rootFolder)
 
    %% get root folder
    if nargin < 1
-       rootFolder = which('run_train_lr.m');
+       rootFolder = which('install_selclassif.m');
        rootFolder = [fileparts( rootFolder ) '/'];
    end
    
    
-   run([rootFolder 'stprtool/stprpath.m']);
+   run([rootFolder '3rdparty/stprtool/stprpath.m']);
    
    addpath( rootFolder );
    addpath( [rootFolder 'src/']);
-   addpath( [rootFolder 'src/libsvm-3.1/']);
-   addpath( [rootFolder 'libocas/']);
+   addpath( [rootFolder '3rdparty/libsvm-3.1/']);
+   addpath( [rootFolder '3rdparty/libocas/']);
    
    
     switch hostname
