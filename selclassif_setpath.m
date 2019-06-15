@@ -4,7 +4,7 @@ function setup_matconvnet(rootFolder)
 
    %% get root folder
    if nargin < 1
-       rootFolder = which('install_selclassif.m');
+       rootFolder = which('selclassif_install.m');
        rootFolder = [fileparts( rootFolder ) '/'];
    end
    

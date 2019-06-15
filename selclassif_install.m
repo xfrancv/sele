@@ -6,7 +6,7 @@ cd ..;
 
 %% libsvm
 cd 3rdparty/libsvm-3.1/
-mex libsvmread.c
+mex -largeArrayDims libsvmread.c
 cd ..;
 cd ..;
 

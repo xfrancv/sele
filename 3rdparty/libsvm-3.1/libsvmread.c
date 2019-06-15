@@ -6,9 +6,9 @@
 
 #include "mex.h"
 
-#if MX_API_VER < 0x07030000
+/*#if MX_API_VER < 0x07030000
 typedef int mwIndex;
-#endif 
+#endif */
 #ifndef max
 #define max(x,y) (((x)>(y))?(x):(y))
 #endif

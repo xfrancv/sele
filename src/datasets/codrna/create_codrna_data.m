@@ -1,6 +1,6 @@
 rng(0);
 
-outFile  = '../../data/codrna1.mat';
+outFile  = '../../../data/codrna1.mat';
 
 portions = [0.25 0.05 0.2 0.2 0.3]; % trn1 trn2 val1 val2 tst
 nSplits  = 5;

@@ -1,6 +1,6 @@
 rng(0);
 
-outFile = '../../data/covtype1.mat';
+outFile = '../../../data/covtype1.mat';
 portions = [0.28 0.02 0.2 0.2 0.3]; % trn1 trn2 val1 val2 tst
 nSplits  = 5;
 

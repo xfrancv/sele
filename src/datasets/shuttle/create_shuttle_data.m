@@ -1,6 +1,6 @@
 rng(0);
 
-outFile = '../../data/shuttle1.mat';
+outFile = '../../../data/shuttle1.mat';
 portions = [0.3 0.3 0.1 0.1 0.2]; % trn1 trn2 val1 val2 tst
 nSplits  = 5;
 
