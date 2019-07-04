@@ -7,7 +7,7 @@ function run_train_conf_hinge_mlp( dataSet, setting )
 
     switch setting
         case 'msvmlin+hinge1+zmuv'
-            Data        = load( ['data/' dataSet '.mat'], 'X','Y','Split' );
+            Data        = load( ['../data/' dataSet '.mat'], 'X','Y','Split' );
             rootFolder  = ['results/msvmlin/' dataSet '/'];
             
             Params = [];
@@ -24,7 +24,7 @@ function run_train_conf_hinge_mlp( dataSet, setting )
             zmuvNorm    = 1;      
       
         case 'lr+hinge1+zmuv'
-            Data        = load( ['data/' dataSet '.mat'], 'X','Y','Split' );
+            Data        = load( ['../data/' dataSet '.mat'], 'X','Y','Split' );
             rootFolder  = ['results/lr/' dataSet '/'];
             
             Params = [];
@@ -111,7 +111,6 @@ function run_train_conf_hinge_mlp( dataSet, setting )
                 Net  =  init_confnet1( nDims, nY, nHiddenStates, ...
                                 'dropOutRate',  Params(p).dropOut,...
                                 'useBatchNorm', true,...
-                                'normPower',1,...
                                 'leak', 0.1);
                 Net.initParams();
 

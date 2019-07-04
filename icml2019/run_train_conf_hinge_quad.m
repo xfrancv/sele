@@ -9,7 +9,7 @@ function run_train_conf_hinge_quad( dataSet, setting )
         case 'lr+hinge1+zmuv+par5';
 
             lambdaRange = [1 10 100 1000];
-            Data        = load( ['data/' dataSet '.mat'], 'X','Y','Split' );
+            Data        = load( ['../data/' dataSet '.mat'], 'X','Y','Split' );
             rootFolder  = ['results/lr/' dataSet '/'];
 
             Opt.verb    = 1;   
@@ -21,7 +21,7 @@ function run_train_conf_hinge_quad( dataSet, setting )
         case 'msvmlin+hinge1+zmuv+par5';
 
             lambdaRange = [1 10 100 1000];
-            Data        = load( ['data/' dataSet '.mat'], 'X','Y','Split' );
+            Data        = load( ['../data/' dataSet '.mat'], 'X','Y','Split' );
             rootFolder  = ['results/msvmlin/' dataSet '/'];
 
             Opt.verb    = 1;   

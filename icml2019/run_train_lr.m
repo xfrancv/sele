@@ -8,7 +8,7 @@ function run_train_mlogreg_linear( dataSet, setting )
     switch setting
         case 'zmuv+reg0-100'
             lambdaRange = [0 1 10 100];
-            Data = load( ['data/' dataSet '.mat'], 'X','Y','Split' );
+            Data = load( ['../data/' dataSet '.mat'], 'X','Y','Split' );
 
             Opt.maxIter = 100;
             Opt.eps     = 1.e-5;

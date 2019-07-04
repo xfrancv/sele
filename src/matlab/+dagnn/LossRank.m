@@ -3,7 +3,7 @@ classdef LossRank < dagnn.Loss
 %
 
   properties
-      normPower = 2;
+%      normPower = 2;
   end
 
   methods
@@ -27,7 +27,8 @@ classdef LossRank < dagnn.Loss
             idx   = find( score > 0 );
             R     = R + risk(i) * sum(score(idx));
         end
-        R = R / N^obj.normPower;
+%        R = R / N^obj.normPower;
+        R = R / N;
         
         outputs{1} = R ;
       
@@ -60,7 +61,8 @@ classdef LossRank < dagnn.Loss
             alpha(idx) = alpha(idx) + risk(i);
             alpha(i)   = alpha(i) - numel(idx)*risk(i);
         end
-        alpha = alpha / N^obj.normPower;
+%        alpha = alpha / N^obj.normPower;
+        alpha = alpha / N;
         
         der = zeros( nY, N,'single');
         for i = 1 : N

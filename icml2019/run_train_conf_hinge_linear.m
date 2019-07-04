@@ -10,7 +10,7 @@ function run_train_conf_hinge_linear( dataSet, setting )
         case 'lr+hinge1+zmuv+par5';
 
             lambdaRange = [1 10 100 1000];
-            Data        = load( ['data/' dataSet '.mat'], 'X','Y','Split' );
+            Data        = load( ['../data/' dataSet '.mat'], 'X','Y','Split' );
             rootFolder  = ['results/lr/' dataSet '/'];
 
             Opt.verb    = 1;   
@@ -22,7 +22,7 @@ function run_train_conf_hinge_linear( dataSet, setting )
         case 'msvmlin+hinge1+zmuv+par5';
 
             lambdaRange = [1 10 100 1000];
-            Data        = load( ['data/' dataSet '.mat'], 'X','Y','Split' );
+            Data        = load( ['../data/' dataSet '.mat'], 'X','Y','Split' );
             rootFolder  = ['results/msvmlin/' dataSet '/'];
 
             Opt.verb    = 1;   
@@ -229,10 +229,7 @@ function run_train_conf_hinge_linear( dataSet, setting )
             end
                         
             tstPredLoss   = predLoss( tstIdx );
-            [~,idx]       = sort( uncertainty( tstIdx ) );
-            tstRiskCurve  = cumsum( tstPredLoss(idx))./[1:nTst]';
-            tstAuc        = mean( tstRiskCurve );
-            tstLoss       = sum( cumsum( tstPredLoss(idx) ))/(nTst^2);
+            
 
             valPredLoss    = predLoss( valIdx);
             [~,idx]        = sort( uncertainty( valIdx) );

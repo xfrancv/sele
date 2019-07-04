@@ -86,13 +86,15 @@ if nargin < 2 || isempty(Classifier)
 else
     D = Classifier( tstX, Model);
 end
+Z  = reshape( D, Opts.gridx,Opts.gridy);
 
 %%
-Z  = reshape( D, Opts.gridx,Opts.gridy);
-h1 = image(x,y,Z);
-h1.AlphaData = 0.5;
-if max(D(:)) < size(colorMap,1)
-    colormap( colorMap );
+if Opts.fill
+    h1 = image(x,y,Z);
+    h1.AlphaData = 0.5;
+    if max(D(:)) < size(colorMap,1)
+        colormap( colorMap );
+    end
 end
 
 %%
