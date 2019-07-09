@@ -57,7 +57,7 @@ function example_svm_optimal( dataSet )
         ppatterns(trnX1,trnY1);
         pclassifier( Svm, @linclassif, struct('fill',0) );
         hold on;
-        title('Decision hyperplane+optimal_uncertainty');
+        title('Decision hyperplane+optimal uncertainty');
 
         gridDensity = 100;
         a       = axis;

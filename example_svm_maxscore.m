@@ -13,9 +13,6 @@ function example_svm_sele_maxscore( dataSet)
 rng(0);
 selclassif_setpath;
 
-%dataSet = 1;   % difficult for max-score heuristic
-dataSet = 2;  % easy for max-score heuristic
-
 %% Create datasets
 [trnX1,trnY1,trnX2,trnY2,valX2,valY2,tstX,tstY] = create_gmm_data( dataSet );
 

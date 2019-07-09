@@ -12,7 +12,7 @@ function example_svm_sele_convex( dataSet, featureMap )
 
 selclassif_setpath;
 
-lambda   = 0.1; % regularization constant
+lambda   = 1; % regularization constant
 nBatches = 5;   % # of batches to which the risk is decomposed
 
 

@@ -14,12 +14,12 @@ for data = [1 2]
     example_svm_sele_mlp( data );
 
     % SVM + max-score used as selective fucntion
-    example_svm_sele_maxscore( data );
+    example_svm_maxscore( data );
 
 end
 
 %% risk-coverage curve for various selective classifeirs
-for data = {'data1','data2'}
+for data = [ 1 2 ]
 
     MaxScore = load( sprintf('results/data%d/maxscore/results.mat', data));
     SeleLin  = load( sprintf('results/data%d/sele_linear/results.mat', data));
@@ -33,7 +33,7 @@ for data = {'data1','data2'}
     hold on;
     h2=plot( 100*[1:numel(SeleLin.tstRiskCurve)]/numel(SeleLin.tstRiskCurve), SeleLin.tstRiskCurve, 'g', 'linewidth',2);
     h3=plot( 100*[1:numel(SeleQuad.tstRiskCurve)]/numel(SeleQuad.tstRiskCurve), SeleQuad.tstRiskCurve, 'b', 'linewidth',2);
-    h4=plot( 100*[1:numel(SeleQuad.tstRiskCurve)]/numel(SeleMlp.tstRiskCurve), SeleMlp.tstRiskCurve, 'm', 'linewidth',2);
+    h4=plot( 100*[1:numel(SeleQuad.tstRiskCurve)]/numel(SeleMlp.tstRiskCurve), SeleMlp.tstRiskCurve, 'c', 'linewidth',2);
     h5=plot( 100*[1:numel(Optimal.tstRiskCurve)]/numel(Optimal.tstRiskCurve), Optimal.tstRiskCurve, 'r', 'linewidth',2);
     grid on;
     title('Risk-Coverage curve');
@@ -45,5 +45,5 @@ for data = {'data1','data2'}
         sprintf('SVM+Sele(mlp) AUC=%.2f',mean(SeleMlp.tstRiskCurve)),...
         sprintf('SVM+Optimal AUC=%.2f',mean(Optimal.tstRiskCurve)));
 
-    print( hf, '-depsc', sprintf('results/rc_%s.eps', data{1}));
+    print( hf, '-depsc', sprintf('results/rc_data%d.eps', data));
 end
