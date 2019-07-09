@@ -1,14 +1,33 @@
+%% train selective classifiers: linear SVM as the predictor + SELECTIVE FUNCTION
+for data = [1 2]
+    
+    % SVM + optimal selection function
+    example_svm_optimal( data );
 
+    % SVM + linear selective function learned from examples
+    example_svm_sele_convex( data, 'linear' );
 
+    % SVM + quadratic selective function learned from examples
+    example_svm_sele_convex( data, 'quad' );
+
+    % SVM + multi-layer perceptron used as selective function
+    example_svm_sele_mlp( data );
+
+    % SVM + max-score used as selective fucntion
+    example_svm_sele_maxscore( data );
+
+end
+
+%% risk-coverage curve for various selective classifeirs
 for data = {'data1','data2'}
 
-MaxScore = load( sprintf('results/%s/maxscore/results.mat', data{1}));
-SeleLin  = load( sprintf('results/%s/sele_linear/results.mat', data{1}));
-SeleQuad = load( sprintf('results/%s/sele_quad/results.mat', data{1}));
-SeleMlp  = load( sprintf('results/%s/sele_mlp/results.mat', data{1}));
-Optimal  = load( sprintf('results/%s/optimal/results.mat', data{1}));
+    MaxScore = load( sprintf('results/data%d/maxscore/results.mat', data));
+    SeleLin  = load( sprintf('results/data%d/sele_linear/results.mat', data));
+    SeleQuad = load( sprintf('results/data%d/sele_quad/results.mat', data));
+    SeleMlp  = load( sprintf('results/data%d/sele_mlp/results.mat', data));
+    Optimal  = load( sprintf('results/data%d/optimal/results.mat', data));
 
-    hf=figure('name', data{1});
+    hf=figure('name', sprintf('data%d', data));
 
     h1=plot( 100*[1:numel(MaxScore.tstRiskCurve)]/numel(MaxScore.tstRiskCurve), MaxScore.tstRiskCurve, 'k', 'linewidth',2);
     hold on;

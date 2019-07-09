@@ -1,3 +1,12 @@
+function example_svm_sele_maxscore( dataSet)
+% example_svm_sele_maxscore( dataSet)
+%
+% Train a selective classifier: linear SVM + max-score used as selection 
+% function 
+%
+% dataSet = 1;  ... difficult for max-score heuristic
+% dataSet = 2;  ... easy for max-score heuristic
+
 %% Selective classifier based on linear SVM.
 % Selection function is max-score heuristic.
 

@@ -1,9 +1,12 @@
 function [trnX1,trnY1,trnX2,trnY2,valX2,valY2,tstX,tstY, Gmm] = create_gmm_data( dataSet )
-%%
+% Generate syntheic classification data
+% 
+% [trnX1,trnY1,trnX2,trnY2,valX2,valY2,tstX,tstY, Gmm] = create_gmm_data( dataSet )
+%
 rng(0);
 
 switch dataSet 
-    case 1 % Gaussians on a circle
+    case 1 % Gaussians on a circle; difficult for maxscore
         nY    = 5;
         nTrn1 = 2000;
         nTrn2 = 2000;
@@ -30,7 +33,7 @@ switch dataSet
         [valX2,valY2] = gmm_samp( Gmm, nVal2);
         [tstX,tstY] = gmm_samp( Gmm, nTst);
         
-    case 2 % Gaussians on a circle
+    case 2 % Gaussians on a circle; easy for max-score
         nY    = 5;
         nTrn1 = 2000;
         nTrn2 = 2000;

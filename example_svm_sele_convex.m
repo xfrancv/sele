@@ -1,16 +1,19 @@
-%% Selective classifier: linear SVM + selective function learned by convex optimizatiton.
+function example_svm_sele_convex( dataSet, featureMap )
+% example_svm_sele_convex( dataSet, featureMap )
+%
+% Train a selective classifier: linear SVM + selection function learned 
+% by convex optimizatiton.
+%
+% dataSet = 1;  ... difficult for max-score heuristic
+% dataSet = 2;  ... easy for max-score heuristic
+%
+% featureMap = 'linear'  ... linear selection function
+% featureMap = 'quad'    ... quadratic selection function
 
 selclassif_setpath;
 
-% shape of the learned uncertainty function
-featureMap = 'linear';  
-%featureMap = 'quad';
-
 lambda   = 0.1; % regularization constant
 nBatches = 5;   % # of batches to which the risk is decomposed
-
-%dataSet = 1;   % difficult for max-score heuristic
-dataSet = 2;  % easy for max-score heuristic
 
 
 %% Create datasets
