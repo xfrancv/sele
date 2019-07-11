@@ -5,7 +5,7 @@ classifiers which was published in
 
 V. Franc, D.Prusa: On Discriminative Learning of Prediction Uncertainty. ICML 2019.
 
-Developed and tested in Matlab (R2016a) under Linux Ubuntu 14.04.5 LTS.
+It was developed and tested in Matlab (R2016a) under Linux Ubuntu 18.04.2 LTS.
 
 
 # Install
