@@ -1,6 +1,8 @@
-# Discriminative learning of prediction uncertainty
+# SELE: discriminative learning of selective classifiers
 
-Code for ICML paper: 
+This repository implements a method for learning selective classifiers which was
+published in
+
 V. Franc, D.Prusa: On Discriminative Learning of Prediction Uncertainty. ICML 2019.
 
 Developed and tested in Matlab (R2016a) under Linux Ubuntu 14.04.5 LTS.
@@ -26,13 +28,13 @@ by running
 There is a demo which shows how to train selective classifier. The predictor
 is the multi-class SVM classifier. Then, there are 4 different methods how to
 construct the selection function. The theory behind is
-described [here](http://cmp.felk.cvut.cz/~xfrancv/pages/sele.html). In Matlab run
+outlined [here](http://cmp.felk.cvut.cz/~xfrancv/pages/sele.html). In Matlab run
 
 `example_svm`
 
-This will train all the models, it will compare their performance in terms of
-Risk-Coverage curve and it will visualize the classifier and the uncertainty function.
-The figures are stored to folder results/.
+which will train all the selective classifier, it will compare their performance in terms of
+Risk-Coverage curve and it will visualize them in 2D. The resulting figures are stored
+to the folder results/.
 
 
 # ICML paper Experiments
