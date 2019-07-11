@@ -87,7 +87,9 @@ if size(trnX1,1) == 2
     [Y,svmScore] = linclassif( X, Svm); 
     
     uncertainty = predict_uncertainty( feature_map(X), Y, Sele );
-    h = contour(fx,fy, reshape(uncertainty,gridDensity,gridDensity), 'ShowText','on');
+    contour(fx,fy, reshape(uncertainty,gridDensity,gridDensity),'ShowText','on','linewidth',1);
+    set(gca,'FontSize',15);
+
     print( hf, '-depsc', sprintf('results/svm_sele_%s_data%d.eps', featureMap, dataSet));
 
 end

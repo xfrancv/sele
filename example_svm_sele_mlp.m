@@ -117,7 +117,7 @@ function example_svm_sele_mlp( dataSet )
 
     %% Plot decision boundary and uncertainty function
     if size(trnX1,1) == 2
-        figure;
+        hf=figure;
         ppatterns(trnX1,trnY1);
         pclassifier( Svm, @linclassif, struct('fill',0) );
         hold on;
@@ -134,7 +134,11 @@ function example_svm_sele_mlp( dataSet )
         getBatch          = @(a,b) getBatchConfDag(SolverOpts, a, b, 1);            
         uncertainty       = confcnn_predict(ImDb, Net, nY, 100, getBatch );   
 
-        h = contour(fx,fy, reshape(uncertainty,gridDensity,gridDensity), 'ShowText','on');
+        contour(fx,fy, reshape(uncertainty,gridDensity,gridDensity),'ShowText','on','linewidth',1);
+        set(gca,'FontSize',15);
+        
+    
+        print( hf, '-depsc', sprintf('results/svm_sele_mlp_data%d.eps', dataSet));
     end
 
     %% Save results

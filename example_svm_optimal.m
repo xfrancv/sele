@@ -68,7 +68,8 @@ function example_svm_optimal( dataSet )
         post = exp( gmm_logpost( X, Gmm)); 
         uncertainty  = 1 - post( Y+[0:numel(Y)-1]*nY);
 
-        h = contour(fx,fy, reshape(uncertainty,gridDensity,gridDensity), 'ShowText','on');
+        contour(fx,fy, reshape(uncertainty,gridDensity,gridDensity), [0.2 0.5 0.9 1],'ShowText','on','linewidth',1);
+        set(gca,'FontSize',15);
         print( hf, '-depsc', sprintf('results/svm_optimal_data%d.eps', dataSet));
 
     end

@@ -60,7 +60,9 @@ if size(trnX1,1) == 2
     X = [fx(:)'; fy(:)'];
     [Y,svmScore] = linclassif( X, Svm); 
     uncertainty  = -max( svmScore);
-    h = contour(fx,fy, reshape(uncertainty,gridDensity,gridDensity), 'ShowText','on');
+    contour(fx,fy, reshape(uncertainty,gridDensity,gridDensity),'ShowText','on','linewidth',1);
+    set(gca,'FontSize',15);
+    
     print( hf, '-depsc', sprintf('results/svm_maxscore_data%d.eps', dataSet));
 end
 
