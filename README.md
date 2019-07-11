@@ -25,14 +25,14 @@ by running
 
 # Demo
 
-There is a demo which shows how to train selective classifier. The predictor
+There is a demo which shows how to a train selective classifier. The predictor
 is the multi-class SVM classifier. Then, there are 4 different methods how to
 construct the selection function. The theory behind is
 outlined [here](http://cmp.felk.cvut.cz/~xfrancv/pages/sele.html). In Matlab run
 
 `example_svm`
 
-which will train all the selective classifier, it will compare their performance in terms of
+which will train all the selective classifiera, it will compare their performance in terms of
 Risk-Coverage curve and it will visualize them in 2D. The resulting figures are stored
 to the folder results/.
 
@@ -40,13 +40,9 @@ to the folder results/.
 # ICML paper Experiments
 
 The codes for ICML paper are all stored in the folder icml2019/. To replicate the results, do
-the following 4 steps:
+the following 3 steps:
 
-(1) Set path. In Matlab issue:
-
-`setpath_selclassif`
-
-(2) Train Logistic-Regression and SVM models. In Matlab issue:
+(1) Train Logistic-Regression and SVM models. In Matlab issue:
 
 `run_all_train_classif`
 
@@ -56,17 +52,17 @@ shared diskdrive, namely, the folder results/.
 
 If you have a system with Sun Grid Engine, you can issue multiple jobs automatically by 
 
-$ run_all_train_conf.sh
+$ run_all_train_classif.sh
 
-(3) Train uncertainty functions after all LR and SVM models have been trained. In Matlab run:
+(2) Train uncertainty functions after all LR and SVM models have been trained. In Matlab run:
 
 `run_all_train_conf`
 
 Similarly to "run_all_train_classif", this script can be issued multiple times. See
-the description above.
+the description above. The corresponding batch script is "run_all_train_classif.sh".
 
 
-(4) Generate EPS figures and TeX tables which appeared in the paper. In Matlab issue:
+(3) Generate EPS figures and TeX tables which appeared in the paper. In Matlab issue:
 
 `fig_result_summary`
 `tab_result_summary'
