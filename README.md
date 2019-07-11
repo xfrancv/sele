@@ -42,7 +42,7 @@ the following 4 steps:
 
 (1) Set path. In Matlab issue:
 
-'setpath_selclassif'
+`setpath_selclassif`
 
 (2) Train Logistic-Regression and SVM models. In Matlab issue:
 
