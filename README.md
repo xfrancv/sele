@@ -37,11 +37,16 @@ The figures are stored to folder results/.
 
 # ICML paper Experiments
 
-(STEP 1) Set path. In Matlab issue:
+The codes for ICML paper are all stored in the folder icml2019/. To replicate the results, do
+the following 4 steps:
 
->> setpath_selclassif
+(1) Set path. In Matlab issue:
 
-(STEP 2) Train Logistic-Regression and SVM models. In Matlab issue:
+'''matlab
+setpath_selclassif
+'''
+
+(2) Train Logistic-Regression and SVM models. In Matlab issue:
 
 >> run_all_train_classif
 
@@ -53,7 +58,7 @@ If you have a system with Sun Grid Engine, you can issue multiple jobs automatic
 
 $ run_all_train_conf.sh
 
-(STEP 3) Train uncertainty functions after all LR and SVM models have been trained. In Matlab run:
+(3) Train uncertainty functions after all LR and SVM models have been trained. In Matlab run:
 
 >> run_all_train_conf
 
@@ -61,7 +66,7 @@ Similarly to "run_all_train_classif", this script can be issued multiple times. 
 the description above.
 
 
-(STEP 4) Generate EPS figures and TeX tables which appeared in the paper. In Matlab issue:
+(4) Generate EPS figures and TeX tables which appeared in the paper. In Matlab issue:
 
 >> fig_result_summary
 >> tab_result_summary
