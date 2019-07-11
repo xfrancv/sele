@@ -64,8 +64,10 @@ the description above. The corresponding batch script is "run_all_train_classif.
 
 (3) Generate EPS figures and TeX tables which appeared in the paper. In Matlab issue:
 
-`fig_result_summary`
-`tab_result_summary'
-`tab_datasets'
+```
+fig_result_summary
+tab_result_summary
+tab_datasets
+```
 
 
