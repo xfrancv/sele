@@ -1,7 +1,7 @@
 # SELE: discriminative learning of selective classifiers
 
-This repository implements a method for learning selective classifiers which was
-published in
+This repository contains Matlab implementation of a method for learning selective
+classifiers which was published in
 
 V. Franc, D.Prusa: On Discriminative Learning of Prediction Uncertainty. ICML 2019.
 
