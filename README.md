@@ -1,60 +1,73 @@
-# Discriminative learning of prediction uncertainty
+# SELE: discriminative learning of selective classifiers
 
-Code for ICML paper: 
+This repository contains Matlab implementation of a method for learning selective
+classifiers which was published in
+
 V. Franc, D.Prusa: On Discriminative Learning of Prediction Uncertainty. ICML 2019.
 
-Developed and tested in Matlab (R2016a) under Linux Ubuntu 14.04.5 LTS.
+It was developed and tested in Matlab (R2016a) under Linux Ubuntu 18.04.2 LTS.
 
 
 # Install
 
-(1) Download datasets from UCI repo and libSVM webpage and convert them to MAT file. 
-In Matlab issue:
+You need to download MATCONVNET and compile all MEX files. To this end go to MATLAB
+and run 
 
-    install_data
-
-which downloads raw data and stores them to data/ folder in MAT format.
-This script requires Linux tools: "uncompress, wget, bunzip2, cat". 
+`selclassif_install`
 
 
-(2) Install MATCONVNET, LIBOCAS and STPRTOOL. This requires the Matlab MEX compiler 
-to be setup properly. In Matlab run:
+If you intend to replicate the experiments from ICML paper you will need to
+download the UCI and LIBSVM datasets and convert then to MAT files. This can be done
+by running 
 
-    install_selclassif
-
-which installs all the packages.
-
-
-# Run experiments in Matlab
-
-(1) Set path. In Matlab issue:
-
-    setpath_selclassif
+`selclassif_install_data`
 
 
-(2) Train Logistic-regression and SVM models. In Matlab issue:
+# Demo
 
-    run_all_train_classif
+There is a demo which shows how to a train selective classifier. The predictor
+is the multi-class SVM classifier. Then, there are 4 different methods how to
+construct the selection function. The theory behind is
+outlined [here](http://cmp.felk.cvut.cz/~xfrancv/pages/sele.html). In Matlab run
 
-The script can be issued multiple times simultaneously on different computers. The function 
+`example_svm`
+
+which will train all the selective classifiera, it will compare their performance in terms of
+Risk-Coverage curve and it will visualize them in 2D. The resulting figures are stored
+to the folder results/.
+
+
+# ICML paper Experiments
+
+The codes for ICML paper are all stored in the folder icml2019/. To replicate the results, do
+the following 3 steps:
+
+(1) Train Logistic-Regression and SVM models. In Matlab issue:
+
+`run_all_train_classif`
+
+This script can be issued multiple times simultaneously on different computers. The function 
 uses *.lock files to synchronize different instances hence the computers must have a 
 shared diskdrive, namely, the folder results/.
 
 If you have a system with Sun Grid Engine, you can issue multiple jobs automatically by 
 
-    $ run_all_train_conf.sh
+$ run_all_train_classif.sh
+
+(2) Train uncertainty functions after all LR and SVM models have been trained. In Matlab run:
+
+`run_all_train_conf`
+
+Similarly to "run_all_train_classif", this script can be issued multiple times. See
+the description above. The corresponding batch script is "run_all_train_classif.sh".
 
 
-(3) Train uncertainty functions after all LR and SVM models have been trained. In Matlab run:
+(3) Generate EPS figures and TeX tables which appeared in the paper. In Matlab issue:
 
-    run_all_train_conf
+```
+fig_result_summary
+tab_result_summary
+tab_datasets
+```
 
-Similarly to "run_all_train_classif", this script can be issued multiple times. 
-See description above.
 
-
-(4) Generate EPS figures and TeX tables which appeared in the paper. In Matlab issue:
-
-    fig_result_summary
-    tab_result_summary
-    tab_datasets
