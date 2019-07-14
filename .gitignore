@@ -1,6 +1,7 @@
 icml2019/results
 icml2019/data
 icml2019/figs
+icml2019/jobsLogs
 *.mexa64
 *~
 pax_global_header

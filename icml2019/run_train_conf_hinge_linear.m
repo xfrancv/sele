@@ -227,9 +227,12 @@ function run_train_conf_hinge_linear( dataSet, setting )
                 xx(:, predY(i)) = X(:,i);
                 uncertainty(i) = W'*xx(:);
             end
-                        
+
             tstPredLoss   = predLoss( tstIdx );
-            
+            [~,idx]       = sort( uncertainty( tstIdx ) );
+            tstRiskCurve  = cumsum( tstPredLoss(idx))./[1:nTst]';
+            tstAuc        = mean( tstRiskCurve);
+            tstLoss       = sum( cumsum( tstPredLoss(idx) ))/(nTst^2);
 
             valPredLoss    = predLoss( valIdx);
             [~,idx]        = sort( uncertainty( valIdx) );
