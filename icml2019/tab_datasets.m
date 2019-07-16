@@ -18,7 +18,7 @@ dataSet = {...
 
 fprintf('                     #lab  #feat  #examples     trn1     val1     trn2     val2      tst \n');
 for i = 1 : numel( dataSet )
-    Data = load( ['data/' dataSet{i} '.mat'] );
+    Data = load( ['../data/' dataSet{i} '.mat'] );
     
     nDims = size(Data.X,1);
     nY    = max(Data.Y);
