@@ -10,34 +10,32 @@ It was developed and tested in Matlab (R2016a) under Linux Ubuntu 18.04.2 LTS.
 
 # Install
 
-You need to download MATCONVNET and compile all MEX files. To this end go to MATLAB
-and run 
+You need to download MATCONVNET and compile all MEX files by going to MATLAB
+and running
 
 `selclassif_install`
 
-
-If you intend to replicate the experiments from ICML paper you will need to
+If you intend to replicate the experiments from ICML paper you will in addition need to
 download the UCI and LIBSVM datasets and convert then to MAT files. This can be done
-by running 
+by running a single script
 
 `selclassif_install_data`
 
 
 # Demo
 
-There is a demo which shows how to a train selective classifier. The predictor
-is the multi-class SVM classifier. Then, there are 4 different methods how to
-construct the selection function. The theory behind is
+The code shows how to a train selective classifier. The example classifier
+is trained by the multi-class SVM algorithm. Then, there are 4 different methods how to
+construct a selection function the SVM classifier. The theory behind is
 outlined [here](http://cmp.felk.cvut.cz/~xfrancv/pages/sele.html). In Matlab run
 
 `example_svm`
 
-which will train all the selective classifiera, it will compare their performance in terms of
-Risk-Coverage curve and it will visualize them in 2D. The resulting figures are stored
+which will train all the selective classifiers, it will compare their performance in terms of
+Risk-Coverage curve and it will visualize them in 2D. The resulting figures are then stored
 to the folder results/.
 
-
-# ICML paper Experiments
+# Replication of ICML paper experiments
 
 The codes for ICML paper are all stored in the folder icml2019/. To replicate the results, do
 the following 3 steps:
