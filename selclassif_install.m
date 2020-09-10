@@ -16,6 +16,9 @@ libocascompile;
 cd ..;
 cd ..;
 
+%%
+addpath ./src/;
+
 %% Download and compile MATCONVNET toolbox for training NN
 switch hostname
     case 'halmos'

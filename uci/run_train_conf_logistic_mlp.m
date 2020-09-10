@@ -2,7 +2,7 @@ function run_train_conf_hinge_mlp( dataSet, setting )
 
     if nargin < 1
         dataSet = 'avila1';
-        setting = 'lr+zmuv'; 
+        setting = 'msvmlin+zmuv'; 
     end
 
     switch setting
