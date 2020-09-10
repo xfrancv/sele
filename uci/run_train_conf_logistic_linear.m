@@ -1,42 +1,42 @@
-function run_train_conf_hinge_linear( dataSet, setting )
+function run_train_conf_logistic_linear( dataSet, setting )
 % confidence is modelled by linear function parameters of which found by
-% minimiying SELE loss.
+% fitting logistic model to 0/1-losses.
 %
 
     if nargin < 1
         dataSet = 'codrna1';
-        setting = 'msvmlin+hinge1+zmuv+par5';
+        setting = 'lr+zmuv';
     end
 
     switch setting
         
-        case 'lr+hinge1+zmuv+par5';
+        case 'lr+zmuv';
 
-            lambdaRange = [1 10 100 1000];
+            lambdaRange = [0 1 10 100 1000];
             Data        = load( ['../data/' dataSet '.mat'], 'X','Y','Split' );
             rootFolder  = ['results/lr/' dataSet '/'];
 
-            Opt.verb    = 1;   
-            Opt.tolRel  = 0.01;
-            riskType    = 1;
+            Opt.maxIter = 100;
+            Opt.eps     = 1.e-5;
+            Opt.m       = 5;
+            Opt.verb    = 1;
             zmuvNorm    = 1;
-            nThreads    = 5;
 
-        case 'msvmlin+hinge1+zmuv+par5';
+        case 'msvmlin+zmuv';
 
-            lambdaRange = [1 10 100 1000];
+            lambdaRange = [0 1 10 100 1000];
             Data        = load( ['../data/' dataSet '.mat'], 'X','Y','Split' );
             rootFolder  = ['results/msvmlin/' dataSet '/'];
 
-            Opt.verb    = 1;   
-            Opt.tolRel  = 0.01;
-            riskType    = 1;
+            Opt.maxIter = 100;
+            Opt.eps     = 1.e-5;
+            Opt.m       = 5;
+            Opt.verb    = 1;
             zmuvNorm    = 1;
-            nThreads    = 5;
     end
 
     %%
-    outFolder = sprintf('%s/conf_hinge%d_linear_zmuv%d_th%d/', rootFolder, riskType, zmuvNorm, nThreads );
+    outFolder = sprintf('%s/conf_logistic_linear_zmuv%d/', rootFolder, zmuvNorm );
     if ~exist( outFolder ), mkdir( outFolder ); end
 
 
@@ -84,57 +84,73 @@ function run_train_conf_hinge_linear( dataSet, setting )
                     valY = Data.Y(:,Data.Split(split).val2);
                 end
 
-                if nThreads == 1
-                    RrData = risk_rrank_init(trnX, trnPredY, trnPredLoss, nY);
-                else
-                    RrData = [];
-                    idx    = randperm(nTrn);
-                    from   = 1;
-                    for p = 1 : nThreads
-                        to        = round( p*nTrn/nThreads );
-                        RrData{p} = risk_rrank_init(trnX(:,idx(from:to)), trnPredY(idx(from:to)), trnPredLoss(idx(from:to)), nY);
-                        from      = to + 1;
-                    end
+                W = [];
+                for y = 1 : nY
+                    idx = find( trnPredY == y );
+                    RrData   = risk_logreg_init( trnX(:,idx), 0, trnPredLoss(idx), lambda );
+                    cW        = lbfgs( RrData, 'risk_logreg', [], Opt );
+                    W = [W cW(:)];
                 end
+%                LrModel  = risk_logreg_model( RrData, W );
+                
+%                 if nThreads == 1
+%                     RrData = risk_rrank_init(trnX, trnPredY, trnPredLoss, nY);
+%                 else
+%                     RrData = [];
+%                     idx    = randperm(nTrn);
+%                     from   = 1;
+%                     for p = 1 : nThreads
+%                         to        = round( p*nTrn/nThreads );
+%                         RrData{p} = risk_rrank_init(trnX(:,idx(from:to)), trnPredY(idx(from:to)), trnPredLoss(idx(from:to)), nY);
+%                         from      = to + 1;
+%                     end
+%                 end
                 
                 % run solver
-                if lambda ~= 0
-                    switch riskType
-                        case 1
-                            if nThreads == 1
-                                [W, Stat] = bmrm( RrData, @risk_rrank, lambda, Opt );
-                            else
-%                                [W, Stat] = parbmrm( RrData, @risk_rrank, lambda, Opt );
-                                [W, Stat] = bmrm( RrData, @risk_rrank_par, lambda, Opt );
-                                
-                            end
-                        case 2
-                            [W, Stat] = bmrm( RrData, @risk_rrank2, lambda, Opt );
-                    end
-                else
-                    boxConstr = ones( size(RrData.X,1),1)*1000;
-                    switch riskType
-                        case 1
-                            [W, Stat] = accpm( RrData, @risk_rrank,[],[],boxConstr, lambda, Opt);
-                        case 2
-                            [W, Stat] = accpm( RrData, @risk_rrank2,[],[],boxConstr, lambda, Opt);
-                    end
-                end
+%                 if lambda ~= 0
+%                     switch riskType
+%                         case 1
+%                             if nThreads == 1
+%                                 [W, Stat] = bmrm( RrData, @risk_rrank, lambda, Opt );
+%                             else
+% %                                [W, Stat] = parbmrm( RrData, @risk_rrank, lambda, Opt );
+%                                 [W, Stat] = bmrm( RrData, @risk_rrank_par, lambda, Opt );
+%                                 
+%                             end
+%                         case 2
+%                             [W, Stat] = bmrm( RrData, @risk_rrank2, lambda, Opt );
+%                     end
+%                 else
+%                     boxConstr = ones( size(RrData.X,1),1)*1000;
+%                     switch riskType
+%                         case 1
+%                             [W, Stat] = accpm( RrData, @risk_rrank,[],[],boxConstr, lambda, Opt);
+%                         case 2
+%                             [W, Stat] = accpm( RrData, @risk_rrank2,[],[],boxConstr, lambda, Opt);
+%                     end
+%                 end
 
-                conf  = zeros( nVal, 1);
-                for i = 1 : nVal
-                    xx                 = zeros(size(valX,1),nY);
-                    xx(:, valPredY(i)) = valX(:,i);
-                    conf(i)            = W'*xx(:);
-                end
+%                 conf  = zeros( nVal, 1);
+%                 for i = 1 : nVal
+%                     conf(i) = W(:,valPredY(i))'*valX(:,i);
+%                 end
+                
+                conf = W'*valX;
+                conf = conf(valPredY(:)+[0:nVal-1]'*nY);
 
                 [~,idx] = sort( conf );
                 valAuc  = sum( cumsum( valPredLoss(idx) ))/(nVal^2);
 
-                RrData  = risk_rrank_init(trnX, trnPredY, trnPredLoss, nY);
-                conf    = W'*RrData.X;
+%                RrData  = risk_rrank_init(trnX, trnPredY, trnPredLoss, nY);
+                conf = W'*trnX;
+                conf = conf(trnPredY(:)+[0:nTrn-1]'*nY);
+%                 conf  = zeros( nTrn, 1);
+%                 for i = 1 : nTrn
+%                     conf(i) = W(:,trnPredY(i))'*trnX(:,i);
+%                 end
+%                conf    = W'*trnX;
                 [~,idx] = sort( conf );
-                trnAuc  = sum( cumsum( RrData.risk(idx)))/(nTrn^2);
+                trnAuc  = sum( cumsum( trnPredLoss(idx)))/(nTrn^2);
 
                 fprintf('trnAuc=%.4f, valAuc =%.4f\n', trnAuc, valAuc);
 
@@ -224,12 +240,16 @@ function run_train_conf_hinge_linear( dataSet, setting )
                 X = [Data.X; ones(1,nExamples)];
             end
             
-            uncertainty = zeros( nExamples,1);
-            for i = 1 : nExamples
-                xx = zeros(size( X,1),nY);
-                xx(:, predY(i)) = X(:,i);
-                uncertainty(i) = W'*xx(:);
-            end
+%            uncertainty = X'*W;
+%            uncertainty = zeros( nExamples,1);
+            uncertainty = W'*X;
+            uncertainty = uncertainty(predY(:)+[0:numel(predY)-1]'*nY);
+            
+%            for i = 1 : nExamples
+%                 xx = zeros(size( X,1),nY);
+%                 xx(:, predY(i)) = X(:,i);
+%                uncertainty(i) = W(:,predY(i))'*X(:,i);
+%            end
 
             tstPredLoss   = predLoss( tstIdx );
             [~,idx]       = sort( uncertainty( tstIdx ) );
@@ -268,13 +288,13 @@ function run_train_conf_hinge_linear( dataSet, setting )
     save( outFile, 'tstRiskCurve', 'tstAuc', 'valLoss', 'tstLoss' );
 
     %%
-%     figure;
-%     plot(  [1:nTst]/nTst, tstRiskCurve );
-%     hold on;
-%     plot( [1:nTst]/nTst, mean( tstRiskCurve, 2), 'r', 'linewidth', 2);
-%     xlabel('cover');
-%     ylabel('err');
-%     grid on;
+    figure;
+    plot(  [1:nTst]/nTst, tstRiskCurve );
+    hold on;
+    plot( [1:nTst]/nTst, mean( tstRiskCurve, 2), 'r', 'linewidth', 2);
+    xlabel('cover');
+    ylabel('err');
+    grid on;
 
     return;
 end

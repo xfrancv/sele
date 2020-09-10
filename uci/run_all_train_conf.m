@@ -1,10 +1,32 @@
 run('../selclassif_setpath.m');;
 
-dataSet = {'avila1', 'codrna1','covtype1','ijcnn1','letter1',...
+% dataSet = {'avila1', 'codrna1','covtype1','ijcnn1','letter1',...
+%             'pendigit1', 'phishing1', 'sattelite1','sensorless1','shuttle1' };
+dataSet = {'avila1', 'codrna1','ijcnn1','letter1',...
             'pendigit1', 'phishing1', 'sattelite1','sensorless1','shuttle1' };
 
     
-%% linear conf rule trained on LR 
+%% quad conf rule trained on LR using logistic regression loss
+for i = 1 : numel( dataSet )
+    run_train_conf_logistic_quad( dataSet{i}, 'lr+zmuv');    
+end
+
+%% quad conf rule trained on SVM using logistic regression loss
+for i = 1 : numel( dataSet )
+    run_train_conf_logistic_quad( dataSet{i}, 'msvmlin+zmuv');    
+end
+           
+%% linear conf rule trained on LR using logistic regression loss
+for i = 1 : numel( dataSet )
+    run_train_conf_logistic_linear( dataSet{i}, 'lr+zmuv');    
+end
+
+%% linear conf rule trained on SVM using logistic regression loss
+for i = 1 : numel( dataSet )
+    run_train_conf_logistic_linear( dataSet{i}, 'msvmlin+zmuv');    
+end
+
+%% linear conf rule trained on LR
 for i = 1 : numel( dataSet )
     run_train_conf_hinge_linear( dataSet{i}, 'lr+hinge1+zmuv+par5');    
 end
