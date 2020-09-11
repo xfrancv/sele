@@ -48,9 +48,6 @@ for i = 1 : numel( dataSet )
     Exp1(i).Result(end+1).name  = 'LR+learn(mlp)';
     Exp1(i).Result(end).fname   = ['results/lr/' dataSet{i} '/conf_hinge1_mlp_zmuv1/results.mat'];
 
-    Exp1(i).Result(end+1).name  = 'LR+logistic(linear)';
-    Exp1(i).Result(end).fname   = ['results/lr/' dataSet{i} '/conf_logistic_linear1_zmuv1/results.mat'];
-
     
     Exp2(i).dataset = dataSet{i};
     Exp2(i).Result(1).name  = 'SVM+maxscore';
@@ -64,9 +61,6 @@ for i = 1 : numel( dataSet )
 
     Exp2(i).Result(end+1).name  = 'SVM+sele(mlp)';
     Exp2(i).Result(end).fname   = ['results/msvmlin/' dataSet{i} '/conf_hinge1_mlp_zmuv1/results.mat'];
-
-    Exp2(i).Result(end+1).name  = 'SVM+logistic(linear)';
-    Exp2(i).Result(end).fname   = ['results/msvmlin/' dataSet{i} '/conf_logistic_linear1_zmuv1/results.mat'];
         
 end
 
