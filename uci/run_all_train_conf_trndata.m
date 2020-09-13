@@ -22,21 +22,21 @@ end
 %% linear conf rule trained on SVM using logistic regression loss
 for i = 1 : numel( dataSet )
     for trnData = dataSet{i}{2}
-        run_train_conf_logistic_linear( dataSet{i}, 'msvmlin+zmuv',trnData);    
+        run_train_conf_logistic_linear( dataSet{i}{1}, 'msvmlin+zmuv',trnData);    
     end
 end
 
 %% linear conf rule trained on LR
 for i = 1 : numel( dataSet )
     for trnData = dataSet{i}{2}    
-        run_train_conf_hinge_linear( dataSet{i}, 'lr+hinge1+zmuv+par5', trnData);    
+        run_train_conf_hinge_linear( dataSet{i}{1}, 'lr+hinge1+zmuv+par5', trnData);    
     end
 end
 
 %% linear conf rule trained on SVM 
 for i = 1 : numel( dataSet )
     for trnData = dataSet{i}{2}
-        run_train_conf_hinge_linear( dataSet{i}, 'msvmlin+hinge1+zmuv+par5', trnData );    
+        run_train_conf_hinge_linear( dataSet{i}{1}, 'msvmlin+hinge1+zmuv+par5', trnData );    
     end
 end
 
