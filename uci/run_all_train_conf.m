@@ -1,10 +1,7 @@
 run('../selclassif_setpath.m');;
 
-% dataSet = {'avila1', 'codrna1','covtype1','ijcnn1','letter1',...
-%             'pendigit1', 'phishing1', 'sattelite1','sensorless1','shuttle1' };
-dataSet = {'avila1', 'codrna1','ijcnn1','letter1',...
-            'pendigit1', 'phishing1', 'sattelite1','sensorless1','shuttle1' };
-
+dataSet = {'avila1', 'codrna1','covtype1','ijcnn1','letter1',...
+           'pendigit1', 'phishing1', 'sattelite1','sensorless1','shuttle1' };
     
 %% MLP conf rule trained on LR using logistic regression loss
 for i = 1 : numel( dataSet )

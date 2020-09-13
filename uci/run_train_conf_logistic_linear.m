@@ -1,4 +1,4 @@
-function run_train_conf_logistic_linear( dataSet, setting )
+function run_train_conf_logistic_linear( dataSet, setting, trnData )
 % confidence is modelled by linear function parameters of which found by
 % fitting logistic model to 0/1-losses.
 %
@@ -35,8 +35,16 @@ function run_train_conf_logistic_linear( dataSet, setting )
             zmuvNorm    = 1;
     end
 
+    
     %%
-    outFolder = sprintf('%s/conf_logistic_linear_zmuv%d/', rootFolder, zmuvNorm );
+    if nargin >= 3
+        Data = take_trn2_data( Data, trnData);
+        outFolder = sprintf('%s/conf_logistic_linear_zmuv%d_trn%.f/', rootFolder, zmuvNorm, trnData );
+    else
+        outFolder = sprintf('%s/conf_logistic_linear_zmuv%d/', rootFolder, zmuvNorm );
+    end
+    
+    %%
     if ~exist( outFolder ), mkdir( outFolder ); end
 
 
