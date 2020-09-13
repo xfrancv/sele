@@ -1,4 +1,4 @@
-function run_train_conf_hinge_linear( dataSet, setting, trnDataPercent )
+function run_train_conf_hinge_linear( dataSet, setting, trnData )
 % confidence is modelled by linear function parameters of which found by
 % minimiying SELE loss.
 %
@@ -37,8 +37,8 @@ function run_train_conf_hinge_linear( dataSet, setting, trnDataPercent )
     
     %%
     if nargin >= 3
-        Data = take_trn2_data( Data, trnDataPercent);
-        outFolder = sprintf('%s/conf_hinge%d_linear_zmuv%d_th%d_trn%d/', rootFolder, riskType, zmuvNorm, nThreads, trnDataPercent );        
+        Data = take_trn2_data( Data, trnData );
+        outFolder = sprintf('%s/conf_hinge%d_linear_zmuv%d_th%d_trn%.f/', rootFolder, riskType, zmuvNorm, nThreads, trnData );        
     else
         outFolder = sprintf('%s/conf_hinge%d_linear_zmuv%d_th%d/', rootFolder, riskType, zmuvNorm, nThreads );        
     end

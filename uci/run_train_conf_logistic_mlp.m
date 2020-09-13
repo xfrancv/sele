@@ -1,4 +1,4 @@
-function run_train_conf_hinge_mlp( dataSet, setting )
+function run_train_conf_logistic_mlp( dataSet, setting, trnData )
 
     if nargin < 1
         dataSet = 'avila1';
@@ -42,10 +42,19 @@ function run_train_conf_hinge_mlp( dataSet, setting )
         
     end
 
-    outFolder = sprintf('%sconf_logistic_mlp_zmuv%d/', rootFolder, zmuvNorm );
+    %%
+    if nargin >= 3
+        Data = take_trn2_data( Data, trnData);
+        outFolder = sprintf('%sconf_logistic_mlp_zmuv%d_trn%.f/', rootFolder, zmuvNorm, trnData );
+    else
+        outFolder = sprintf('%sconf_logistic_mlp_zmuv%d/', rootFolder, zmuvNorm );
+    end
+
+    %%
     if ~exist( outFolder ), mkdir( outFolder ); end
 
 
+    
     %%
     nSplits = numel( Data.Split );
     N       = size( Data.X, 2);
