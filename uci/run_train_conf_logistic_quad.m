@@ -1,4 +1,4 @@
-function run_train_conf_logistic_quad( dataSet, setting )
+function run_train_conf_logistic_quad( dataSet, setting, trnData )
 
     if nargin < 1 
         dataSet = 'avila1';
@@ -30,9 +30,16 @@ function run_train_conf_logistic_quad( dataSet, setting )
             Opt.verb    = 1;
             zmuvNorm    = 1;
     end
+    
+    %%
+    if nargin >= 3
+        Data = take_trn2_data( Data, trnData );
+        outFolder = sprintf('%s/conf_logistic_quad_zmuv%d_trn%.f/', rootFolder, zmuvNorm, trnData);
+    else
+        outFolder = sprintf('%s/conf_logistic_quad_zmuv%d/', rootFolder, zmuvNorm);
+    end
 
     
-    outFolder = sprintf('%s/conf_logistic_quad_zmuv%d/', rootFolder, zmuvNorm);
     
     if ~exist( outFolder ), mkdir( outFolder ); end
 

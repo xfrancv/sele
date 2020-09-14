@@ -1,4 +1,4 @@
-function run_train_conf_hinge_quad( dataSet, setting )
+function run_train_conf_hinge_quad( dataSet, setting, trnData )
 
     if nargin < 1 
         dataSet = 'avila1';
@@ -31,9 +31,14 @@ function run_train_conf_hinge_quad( dataSet, setting )
             nBatches    = 5;
     end
 
-    
-    outFolder = sprintf('%s/conf_hinge%d_quad_zmuv%d_th%d/', rootFolder, riskType, zmuvNorm, nBatches );
-    
+    %%
+    if nargin >= 3
+        Data = take_trn2_data( Data, trnData );
+        outFolder = sprintf('%s/conf_hinge%d_quad_zmuv%d_th%d_trn%.f/', rootFolder, riskType, zmuvNorm, nBatches, trnData );
+    else
+        outFolder = sprintf('%s/conf_hinge%d_quad_zmuv%d_th%d/', rootFolder, riskType, zmuvNorm, nBatches );
+    end
+       
     if ~exist( outFolder ), mkdir( outFolder ); end
 
 
