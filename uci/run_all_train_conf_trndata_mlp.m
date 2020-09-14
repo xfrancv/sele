@@ -29,14 +29,14 @@ end
 %% linear conf rule trained on LR
 for i = 1 : numel( dataSet )
     for trnData = dataSet{i}{2}    
-        run_train_conf_hinge_mlp( dataSet{i}{1}, 'lr+hinge1+zmuv+par5', trnData);    
+        run_train_conf_hinge_mlp( dataSet{i}{1}, 'lr+hinge1+zmuv', trnData);    
     end
 end
 
 %% linear conf rule trained on SVM 
 for i = 1 : numel( dataSet )
     for trnData = dataSet{i}{2}
-        run_train_conf_hinge_mlp( dataSet{i}{1}, 'msvmlin+hinge1+zmuv+par5', trnData );    
+        run_train_conf_hinge_mlp( dataSet{i}{1}, 'msvmlin+hinge1+zmuv', trnData );    
     end
 end
 
