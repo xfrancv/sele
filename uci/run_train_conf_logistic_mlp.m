@@ -183,6 +183,22 @@ function run_train_conf_logistic_mlp( dataSet, setting, trnData )
         return;
     end
     
+    %%
+    % erase intermediate NN models
+    for split = 1 : nSplits
+        for p = 1 : numel( Params) 
+            modelFolder = sprintf('%smodel_split%d_param_%s/', outFolder, split, mlp_param_str(Params(p)) );
+            modelFile   = sprintf('%smodel_split%d_param_%s.mat', outFolder, split, mlp_param_str(Params(p)) ); 
+            if exist( modelFile )
+                list = dir( [modelFolder '*.mat']);
+                fprintf('Erasing %d files from %s\n', numel(list), modelFolder );
+                for i = 1 : numel( list )
+                    delete([list(i).folder '/' list(i).name]);
+                end
+            end
+        end
+    end
+    
     
     %% Collect results
     trnLoss = zeros( numel( Params ), nSplits );
