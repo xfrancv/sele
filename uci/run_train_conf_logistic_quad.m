@@ -96,76 +96,27 @@ function run_train_conf_logistic_quad( dataSet, setting, trnData )
                     W = [W cW(:)];
                 end
                 
-%                 if nBatches == 1
-%                     RrData = risk_rrank_init(trnX, trnPredY, trnPredLoss, nY);
-%                 else
-%                     RrData = [];
-%                     idx    = randperm(nTrn);
-%                     from   = 1;
-%                     for p = 1 : nBatches
-%                         to        = round( p*nTrn/nBatches );
-%                         RrData{p} = risk_rrank_init(trnX(:,idx(from:to)), trnPredY(idx(from:to)), trnPredLoss(idx(from:to)), nY);
-%                         from      = to + 1;
-%                     end
-%                 end
-%                 
-%                 % run solver
-%                 if lambda ~= 0
-%                     switch riskType
-%                         case 1
-%                             if nBatches == 1
-%                                 [W, Stat] = bmrm( RrData, @risk_rrank, lambda, Opt );
-%                             else
-%                                 [W, Stat] = bmrm( RrData, @risk_rrank_par, lambda, Opt );
-%                             end
-%                         case 2
-%                             [W, Stat] = bmrm( RrData, @risk_rrank2, lambda, Opt );
-%                     end
-%                 else
-%                     boxConstr = ones( size(RrData.X,1),1)*1000;
-%                     switch riskType
-%                         case 1
-%                             [W, Stat] = accpm( RrData, @risk_rrank,[],[],boxConstr, lambda, Opt);
-%                         case 2
-%                             [W, Stat] = accpm( RrData, @risk_rrank2,[],[],boxConstr, lambda, Opt);
-%                     end
-%                 end
-
-%                 conf  = zeros( nVal, 1);
-%                 for i = 1 : nVal
-%                     xx                 = zeros(size(valX,1),nY);
-%                     xx(:, valPredY(i)) = valX(:,i);
-%                     conf(i)            = W'*xx(:);
-%                 end
-
-%                conf = W'*valX;
-%                 conf  = zeros( nVal, 1);
-%                 for i = 1 : nVal
-%                     conf(i) = W(:,valPredY(i))'*valX(:,i);
-%                 end
                 conf = W'*valX;
                 conf = conf(valPredY(:)+[0:nVal-1]'*nY);                                
 
-                [~,idx] = sort( conf );
-                valLoss = sum( cumsum( valPredLoss(idx) ))/(nVal^2);
-
-%                RrData  = risk_rrank_init(trnX, trnPredY, trnPredLoss, nY);                
-%                conf    = W'*trnX;
+                [~,idx] = sort( conf );               
+                valRiskCurve = cumsum( valPredLoss(idx))./[1:nVal]';
+                valAuc  = mean( valRiskCurve );                
+                valLoss  = sum( cumsum( valPredLoss(idx) ))/(nVal^2);
+                                
                 conf = W'*trnX;
                 conf = conf(trnPredY(:)+[0:nTrn-1]'*nY);
 
-%                 conf  = zeros( nTrn, 1);
-%                 for i = 1 : nTrn
-%                     conf(i) = W(:,trnPredY(i))'*trnX(:,i);
-%                 end
-                
                 [~,idx] = sort( conf );
-                trnLoss  = sum( cumsum( trnPredLoss(idx)))/(nTrn^2);
-
-                fprintf('trnLoss=%.4f, valLoss =%.4f\n', trnLoss, valLoss);
-
-                save( modelFile, 'W', 'trnLoss', 'valLoss', 'T' );
                 
+                trnRiskCurve = cumsum( trnPredLoss(idx))./[1:nTrn]';
+                trnAuc  = mean( trnRiskCurve );
+                trnLoss  = sum( cumsum( trnPredLoss(idx) ))/(nTrn^2);
+                
+                fprintf('trnAuc=%.4f, valAuc =%.4f, trnLoss=%.4f, valLoss=%.4f\n', trnAuc, valAuc, trnLoss, valLoss);
+
+                save( modelFile, 'W', 'trnAuc', 'valAuc', 'T', 'trnLoss','valLoss' );
+
                 delete( lockFile );
             end
         end    
@@ -192,16 +143,16 @@ function run_train_conf_logistic_quad( dataSet, setting, trnData )
     
     
     %% Collect results
-    trnLoss = zeros( numel( lambdaRange ), nSplits );
-    valLoss = zeros( numel( lambdaRange ), nSplits );
+    trnAuc = zeros( numel( lambdaRange ), nSplits );
+    valAuc = zeros( numel( lambdaRange ), nSplits );
     for lambda = lambdaRange
         iLambda = find( lambda == lambdaRange );
         for split = 1 : nSplits
             modelFile = sprintf('%smodel_split%d_lam%f.mat', outFolder, split, lambda );        
-            R = load( modelFile, 'trnLoss', 'valLoss' );
+            R = load( modelFile, 'trnAuc', 'valAuc' );
 
-            trnLoss( iLambda, split) = R.trnLoss;
-            valLoss( iLambda, split) = R.valLoss;
+            trnAuc( iLambda, split) = R.trnAuc;
+            valAuc( iLambda, split) = R.valAuc;
         end
     end
 
@@ -209,17 +160,17 @@ function run_train_conf_logistic_quad( dataSet, setting, trnData )
     fprintf('split   bestLambda   trnloss   valloss\n');
     bestLambda   = nan*ones(nSplits,1);
     for split = 1 : nSplits
-        [~,idx ] = min( valLoss(:,split));
+        [~,idx ] = min( valAuc(:,split));
         bestLambda(split) = lambdaRange( idx );
-        fprintf('%d        %.f           %.4f   %.4f\n', split, bestLambda(split), trnLoss(idx,split),valLoss(idx,split));
+        fprintf('%d        %.f           %.4f   %.4f\n', split, bestLambda(split), trnAuc(idx,split),valAuc(idx,split));
     end
 
-    fprintf('    lambda  trnloss          valloss\n');
+    fprintf('    lambda  trnAuc           valAuc\n');
     for lambda = lambdaRange
         iLambda = find( lambda == lambdaRange );
         fprintf('%10.4f  %.4f(%.4f)  %.4f(%.4f)\n', lambda, ...
-            mean( trnLoss(iLambda,:)), std( trnLoss(iLambda,:)), ...
-            mean( valLoss(iLambda,:)), std( valLoss(iLambda,:)) );
+            mean( trnAuc(iLambda,:)), std( trnAuc(iLambda,:)), ...
+            mean( valAuc(iLambda,:)), std( valAuc(iLambda,:)) );
     end
 
     %% Evaluate best model on test data

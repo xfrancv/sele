@@ -28,7 +28,7 @@ legendLoc = {
     'NorthWest',...
     'NorthWest'};
  
-%%
+%
 if ~exist(outFolder ), mkdir( outFolder ); end
 
 Exp1  = [];
@@ -39,12 +39,6 @@ for i = 1 : numel( dataSet )
     Exp1(i).Result(1).name  = 'LR+plugin';
     Exp1(i).Result(1).fname = ['results/lr/' dataSet{i} '/results.mat'];
 
-%     Exp1(i).Result(end+1).name = 'LR+learn(linear)';
-%     Exp1(i).Result(end).fname  = ['results/lr/' dataSet{i} '/conf_hinge1_linear_zmuv1_th5/results.mat'];
-%     
-%     Exp1(i).Result(end+1).name  = 'LR+learn(quad)';
-%     Exp1(i).Result(end).fname   = ['results/lr/' dataSet{i} '/conf_hinge1_quad_zmuv1_th5/results.mat'];
-    
     Exp1(i).Result(end+1).name  = 'LR+sele(mlp)';
     Exp1(i).Result(end).fname   = ['results/lr/' dataSet{i} '/conf_hinge1_mlp_zmuv1/results.mat'];
 
@@ -66,7 +60,7 @@ end
 
 
 
-%%
+%
 lineStyle = {'k','r','g','b','m'};
 k = 0.3;
 shadeColor = { [1 1 1]-k, [1 k k], [k 1 k], [k k 1]};
@@ -105,7 +99,7 @@ for e = 1 : numel( Exp1 )
     end
     ha1=gca;
         
-    %% SVM figure
+    % SVM figure
     hold on;
     
     fprintf('\n[%s]\n', Exp2(e).dataset );
@@ -144,6 +138,7 @@ for e = 1 : numel( Exp1 )
     axis([0.5 a(2) minR50 maxR100]);
     h=gca;
     h.FontSize=15;
+    title( Exp1(e).dataset );
 
     axes(ha2);
     grid on;
@@ -157,7 +152,10 @@ for e = 1 : numel( Exp1 )
     hf.Position = [520 374 993 424];
     ha1.Position=[0.1300 0.1800 0.3347 0.75];
     ha2.Position=[0.5703 0.1800 0.3347 0.750];
-    print( hf, '-depsc', sprintf('%sLR+SVM_%s.eps', outFolder, Exp1(e).dataset));
+%    print( hf, '-depsc', sprintf('%sLR+SVM_%s.eps', outFolder, Exp1(e).dataset));
+    drawnow;
+    snapnow;
+
     
 end
 

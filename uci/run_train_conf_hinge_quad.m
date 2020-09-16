@@ -128,17 +128,22 @@ function run_train_conf_hinge_quad( dataSet, setting, trnData )
                     conf(i)            = W'*xx(:);
                 end
 
+                
                 [~,idx] = sort( conf );
-                valLoss = sum( cumsum( valPredLoss(idx) ))/(nVal^2);
-
-                RrData  = risk_rrank_init(trnX, trnPredY, trnPredLoss, nY);                
+                valRiskCurve = cumsum( valPredLoss(idx))./[1:nVal]';
+                valAuc  = mean( valRiskCurve );                
+                valLoss  = sum( cumsum( valPredLoss(idx) ))/(nVal^2);
+                
+                RrData  = risk_rrank_init(trnX, trnPredY, trnPredLoss, nY);
                 conf    = W'*RrData.X;
                 [~,idx] = sort( conf );
-                trnLoss  = sum( cumsum( RrData.risk(idx)))/(nTrn^2);
+                trnRiskCurve = cumsum( RrData.risk(idx))./[1:nTrn]';
+                trnAuc  = mean( trnRiskCurve );
+                trnLoss  = sum( cumsum( trnPredLoss(idx) ))/(nTrn^2);
 
-                fprintf('trnLoss=%.4f, valLoss =%.4f\n', trnLoss, valLoss);
-
-                save( modelFile, 'W', 'trnLoss', 'valLoss', 'T' );
+                fprintf('trnAuc=%.4f, valAuc =%.4f, trnLoss=%.4f, valLoss=%.4f\n', trnAuc, valAuc, trnLoss, valLoss);
+                
+                save( modelFile, 'W', 'trnLoss', 'valLoss', 'T', 'trnAuc','valAuc' );
                 
                 delete( lockFile );
             end
@@ -166,34 +171,34 @@ function run_train_conf_hinge_quad( dataSet, setting, trnData )
     
     
     %% Collect results
-    trnLoss = zeros( numel( lambdaRange ), nSplits );
-    valLoss = zeros( numel( lambdaRange ), nSplits );
+    trnAuc = zeros( numel( lambdaRange ), nSplits );
+    valAuc = zeros( numel( lambdaRange ), nSplits );
     for lambda = lambdaRange
         iLambda = find( lambda == lambdaRange );
         for split = 1 : nSplits
             modelFile = sprintf('%smodel_split%d_lam%f.mat', outFolder, split, lambda );        
-            R = load( modelFile, 'trnLoss', 'valLoss' );
+            R = load( modelFile, 'trnAuc', 'valAuc' );
 
-            trnLoss( iLambda, split) = R.trnLoss;
-            valLoss( iLambda, split) = R.valLoss;
+            trnAuc( iLambda, split) = R.trnAuc;
+            valAuc( iLambda, split) = R.valAuc;
         end
     end
 
     %% Find best lambda
-    fprintf('split   bestLambda   trnloss   valloss\n');
+    fprintf('split   bestLambda   trnAuc    valAuc\n');
     bestLambda   = nan*ones(nSplits,1);
     for split = 1 : nSplits
-        [~,idx ] = min( valLoss(:,split));
+        [~,idx ] = min( valAuc(:,split));
         bestLambda(split) = lambdaRange( idx );
-        fprintf('%d        %.f           %.4f   %.4f\n', split, bestLambda(split), trnLoss(idx,split),valLoss(idx,split));
+        fprintf('%d        %.f           %.4f   %.4f\n', split, bestLambda(split), trnAuc(idx,split),valAuc(idx,split));
     end
 
-    fprintf('    lambda  trnloss          valloss\n');
+    fprintf('    lambda  trnAuc           valAuc\n');
     for lambda = lambdaRange
         iLambda = find( lambda == lambdaRange );
         fprintf('%10.4f  %.4f(%.4f)  %.4f(%.4f)\n', lambda, ...
-            mean( trnLoss(iLambda,:)), std( trnLoss(iLambda,:)), ...
-            mean( valLoss(iLambda,:)), std( valLoss(iLambda,:)) );
+            mean( trnAuc(iLambda,:)), std( trnAuc(iLambda,:)), ...
+            mean( valAuc(iLambda,:)), std( valAuc(iLambda,:)) );
     end
 
     %% Evaluate best model on test data

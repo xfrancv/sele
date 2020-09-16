@@ -1,5 +1,4 @@
-%%
-% It generates EPS figures from paper to figs/ folder.
+%
 
 outFolder = 'figs/';
 
@@ -28,7 +27,7 @@ legendLoc = {
     'NorthWest',...
     'NorthWest'};
  
-%%
+%
 if ~exist(outFolder ), mkdir( outFolder ); end
 
 Exp1  = [];
@@ -59,14 +58,13 @@ end
 
 
 
-%%
+%
 lineStyle = {'k','r','g','b','m'};
 k = 0.3;
 shadeColor = { [1 1 1]-k, [1 k k], [k 1 k], [k k 1]};
 for e = 1 : numel( Exp1 )
 
     hf=figure;
- %   title( sprintf('LR on %s', Exp1(e).dataset) );
     hold on;
     
     fprintf('\n[%s]\n', Exp1(e).dataset );
@@ -99,7 +97,7 @@ for e = 1 : numel( Exp1 )
     end
     ha1=gca;
         
-    %% SVM figure
+    % SVM figure
     hold on;
     
     fprintf('\n[%s]\n', Exp2(e).dataset );
@@ -138,6 +136,8 @@ for e = 1 : numel( Exp1 )
     axis([0.5 a(2) minR50 maxR100]);
     h=gca;
     h.FontSize=15;
+    title( Exp1(e).dataset) ;
+
 
     axes(ha2);
     grid on;
@@ -151,7 +151,9 @@ for e = 1 : numel( Exp1 )
     hf.Position = [520 374 993 424];
     ha1.Position=[0.1300 0.1800 0.3347 0.75];
     ha2.Position=[0.5703 0.1800 0.3347 0.750];
-    print( hf, '-depsc', sprintf('%sLR+SVM_%s.eps', outFolder, Exp1(e).dataset));
+%    print( hf, '-depsc', sprintf('%sLR+SVM_%s.eps', outFolder, Exp1(e).dataset));
+    drawnow; 
+    snapnow;
     
 end
 

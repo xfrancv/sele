@@ -137,16 +137,21 @@ function run_train_conf_hinge_linear( dataSet, setting, trnData )
                 end
 
                 [~,idx] = sort( conf );
-                valAuc  = sum( cumsum( valPredLoss(idx) ))/(nVal^2);
+                valRiskCurve = cumsum( valPredLoss(idx))./[1:nVal]';
+                valAuc  = mean( valRiskCurve );                
+                valLoss  = sum( cumsum( valPredLoss(idx) ))/(nVal^2);
 
                 RrData  = risk_rrank_init(trnX, trnPredY, trnPredLoss, nY);
                 conf    = W'*RrData.X;
                 [~,idx] = sort( conf );
-                trnAuc  = sum( cumsum( RrData.risk(idx)))/(nTrn^2);
+                trnRiskCurve = cumsum( RrData.risk(idx))./[1:nTrn]';
+                trnAuc  = mean( trnRiskCurve );
+                trnLoss  = sum( cumsum( trnPredLoss(idx) ))/(nTrn^2);
+                
 
-                fprintf('trnAuc=%.4f, valAuc =%.4f\n', trnAuc, valAuc);
+                fprintf('trnAuc=%.4f, valAuc =%.4f, trnLoss=%.4f, valLoss=%.4f\n', trnAuc, valAuc, trnLoss, valLoss);
 
-                save( modelFile, 'W', 'trnAuc', 'valAuc', 'T' );
+                save( modelFile, 'W', 'trnAuc', 'valAuc', 'T', 'trnLoss', 'valLoss' );
                 
                 delete( lockFile );
             end

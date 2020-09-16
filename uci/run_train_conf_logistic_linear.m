@@ -99,70 +99,27 @@ function run_train_conf_logistic_linear( dataSet, setting, trnData )
                     cW        = lbfgs( RrData, 'risk_logreg', [], Opt );
                     W = [W cW(:)];
                 end
-%                LrModel  = risk_logreg_model( RrData, W );
-                
-%                 if nThreads == 1
-%                     RrData = risk_rrank_init(trnX, trnPredY, trnPredLoss, nY);
-%                 else
-%                     RrData = [];
-%                     idx    = randperm(nTrn);
-%                     from   = 1;
-%                     for p = 1 : nThreads
-%                         to        = round( p*nTrn/nThreads );
-%                         RrData{p} = risk_rrank_init(trnX(:,idx(from:to)), trnPredY(idx(from:to)), trnPredLoss(idx(from:to)), nY);
-%                         from      = to + 1;
-%                     end
-%                 end
-                
-                % run solver
-%                 if lambda ~= 0
-%                     switch riskType
-%                         case 1
-%                             if nThreads == 1
-%                                 [W, Stat] = bmrm( RrData, @risk_rrank, lambda, Opt );
-%                             else
-% %                                [W, Stat] = parbmrm( RrData, @risk_rrank, lambda, Opt );
-%                                 [W, Stat] = bmrm( RrData, @risk_rrank_par, lambda, Opt );
-%                                 
-%                             end
-%                         case 2
-%                             [W, Stat] = bmrm( RrData, @risk_rrank2, lambda, Opt );
-%                     end
-%                 else
-%                     boxConstr = ones( size(RrData.X,1),1)*1000;
-%                     switch riskType
-%                         case 1
-%                             [W, Stat] = accpm( RrData, @risk_rrank,[],[],boxConstr, lambda, Opt);
-%                         case 2
-%                             [W, Stat] = accpm( RrData, @risk_rrank2,[],[],boxConstr, lambda, Opt);
-%                     end
-%                 end
-
-%                 conf  = zeros( nVal, 1);
-%                 for i = 1 : nVal
-%                     conf(i) = W(:,valPredY(i))'*valX(:,i);
-%                 end
                 
                 conf = W'*valX;
                 conf = conf(valPredY(:)+[0:nVal-1]'*nY);
 
                 [~,idx] = sort( conf );
-                valAuc  = sum( cumsum( valPredLoss(idx) ))/(nVal^2);
+                valRiskCurve = cumsum( valPredLoss(idx))./[1:nVal]';
+                valAuc  = mean( valRiskCurve );                
+                valLoss  = sum( cumsum( valPredLoss(idx) ))/(nVal^2);
+                
 
-%                RrData  = risk_rrank_init(trnX, trnPredY, trnPredLoss, nY);
                 conf = W'*trnX;
                 conf = conf(trnPredY(:)+[0:nTrn-1]'*nY);
-%                 conf  = zeros( nTrn, 1);
-%                 for i = 1 : nTrn
-%                     conf(i) = W(:,trnPredY(i))'*trnX(:,i);
-%                 end
-%                conf    = W'*trnX;
                 [~,idx] = sort( conf );
-                trnAuc  = sum( cumsum( trnPredLoss(idx)))/(nTrn^2);
+                trnRiskCurve = cumsum( trnPredLoss(idx))./[1:nTrn]';
+                trnAuc  = mean( trnRiskCurve );
+                trnLoss  = sum( cumsum( trnPredLoss(idx) ))/(nTrn^2);
+                
+                fprintf('trnAuc=%.4f, valAuc =%.4f, trnLoss=%.4f, valLoss=%.4f\n', trnAuc, valAuc, trnLoss, valLoss);
 
-                fprintf('trnAuc=%.4f, valAuc =%.4f\n', trnAuc, valAuc);
-
-                save( modelFile, 'W', 'trnAuc', 'valAuc', 'T' );
+                save( modelFile, 'W', 'trnAuc', 'valAuc', 'T', 'trnLoss','valLoss' );
+                
                 
                 delete( lockFile );
             end

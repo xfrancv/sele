@@ -2,7 +2,7 @@ function run_train_conf_logistic_mlp( dataSet, setting, trnData )
 
     if nargin < 1
         dataSet = 'avila1';
-        setting = 'msvmlin+zmuv'; 
+        setting = 'lr+zmuv'; 
     end
 
     switch setting
@@ -147,16 +147,21 @@ function run_train_conf_logistic_mlp( dataSet, setting, trnData )
                 Net  = dagnn.DagNN.loadobj( Tmp.net) ;
                 
                 conf = confcnn_predict( ImDb, Net, nY, 100, getBatch );   
-
+                
                 [~,idx] = sort( conf( ImDb.valIdx) );
+                valRiskCurve = cumsum( valPredLoss(idx))./[1:nVal]';
+                valAuc  = mean( valRiskCurve );                
                 valLoss  = sum( cumsum( valPredLoss(idx) ))/(nVal^2);
+                
 
                 [~,idx] = sort( conf(ImDb.trnIdx) );
+                trnRiskCurve = cumsum( trnPredLoss(idx))./[1:nTrn]';
+                trnAuc  = mean( trnRiskCurve );                
                 trnLoss  = sum( cumsum( trnPredLoss(idx)))/(nTrn^2);
 
-                fprintf('trnLoss=%.4f, valLoss =%.4f\n', trnLoss, valLoss);
+                fprintf('trnAuc=%.4f, valAuc =%.4f, trnLoss=%.4f, valLoss=%.4f\n', trnAuc, valAuc, trnLoss, valLoss);
 
-                save( modelFile, 'Net', 'trnLoss', 'valLoss', 'T' );
+                save( modelFile, 'Net', 'trnLoss', 'valLoss', 'T', 'trnAuc', 'valAuc' );
                 
                 delete( lockFile );
             end
@@ -201,33 +206,33 @@ function run_train_conf_logistic_mlp( dataSet, setting, trnData )
     
     
     %% Collect results
-    trnLoss = zeros( numel( Params ), nSplits );
-    valLoss = zeros( numel( Params ), nSplits );
+    trnAuc = zeros( numel( Params ), nSplits );
+    valAuc = zeros( numel( Params ), nSplits );
     for p = 1 : numel(  Params )
         for split = 1 : nSplits
             modelFile   = sprintf('%smodel_split%d_param_%s.mat', outFolder, split, mlp_param_str(Params(p)) );
-            R = load( modelFile, 'trnLoss', 'valLoss' );
+            R = load( modelFile, 'trnAuc', 'valAuc' );
 
-            trnLoss( p, split) = R.trnLoss;
-            valLoss( p, split) = R.valLoss;
+            trnAuc( p, split) = R.trnAuc;
+            valAuc( p, split) = R.valAuc;
         end
     end
 
     %% Find best lambda
-    fprintf('split   param                          trnloss   valloss\n');
+    fprintf('split   param                          trnAuc    valAuc\n');
     bestParams   = nan*ones(nSplits,1);
     for split = 1 : nSplits
-        [~,idx ] = min( valLoss(:,split));
+        [~,idx ] = min( valAuc(:,split));
         bestParams(split) = idx;
         fprintf('%d        %2d   %30s           %.4f   %.4f\n', split, idx, ...
-            mlp_param_str(Params(idx)), trnLoss(idx,split),valLoss(idx,split));
+            mlp_param_str(Params(idx)), trnAuc(idx,split),valAuc(idx,split));
     end
 
-    fprintf('    param    trnerr          valerr\n');
+    fprintf('    param    trnAuc          valAuc\n');
     for p = 1 : numel( Params )
         fprintf('%2d   %30s  %.4f(%.4f)  %.4f(%.4f)\n', p, mlp_param_str(Params(p)), ...
-            mean( trnLoss(p,:)), std( trnLoss(p,:)), ...
-            mean( valLoss(p,:)), std( valLoss(p,:)) );
+            mean( trnAuc(p,:)), std( trnAuc(p,:)), ...
+            mean( valAuc(p,:)), std( valAuc(p,:)) );
     end
 
     %% Evaluate best model on test data
