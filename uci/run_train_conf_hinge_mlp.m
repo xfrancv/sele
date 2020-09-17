@@ -2,7 +2,7 @@ function run_train_conf_hinge_mlp( dataSet, setting, trnData )
 
     if nargin < 1
         dataSet = 'avila1';
-        setting = 'lr+hinge1+zmuv'; 
+        setting = 'lr+hinge2+zmuv'; 
     end
 
     switch setting
@@ -22,6 +22,22 @@ function run_train_conf_hinge_mlp( dataSet, setting, trnData )
             numEpochs = 300;
             riskType    = 1;
             zmuvNorm    = 1;      
+        case 'msvmlin+hinge2+zmuv'
+            Data        = load( ['../data/' dataSet '.mat'], 'X','Y','Split' );
+            rootFolder  = ['results/msvmlin/' dataSet '/'];
+            
+            Params = [];
+            for nLayers = [0 2 5]
+                for batchSize = [100]
+                    Params(end+1).nLayers = nLayers;
+                    Params(end).batchSize = batchSize;
+                    Params(end).learningRate = 0.001;
+                    Params(end).dropOut      = [];
+                end
+            end
+            numEpochs = 300;
+            riskType    = 2;
+            zmuvNorm    = 1;      
       
         case 'lr+hinge1+zmuv'
             Data        = load( ['../data/' dataSet '.mat'], 'X','Y','Split' );
@@ -38,7 +54,25 @@ function run_train_conf_hinge_mlp( dataSet, setting, trnData )
             end
             numEpochs = 300;
             riskType    = 1;
-            zmuvNorm    = 1;            
+            zmuvNorm    = 1;
+            
+        case 'lr+hinge2+zmuv'
+            Data        = load( ['../data/' dataSet '.mat'], 'X','Y','Split' );
+            rootFolder  = ['results/lr/' dataSet '/'];
+            
+            Params = [];
+            for nLayers = [0 2 5]
+                for batchSize = [100]
+                    Params(end+1).nLayers = nLayers;
+                    Params(end).batchSize = batchSize;
+                    Params(end).learningRate = 0.001;
+                    Params(end).dropOut      = [];
+                end
+            end
+            numEpochs = 300;
+            riskType    = 2;
+            zmuvNorm    = 1;
+            
         
     end
 
@@ -119,7 +153,8 @@ function run_train_conf_hinge_mlp( dataSet, setting, trnData )
                 Net  =  init_confnet1( nDims, nY, nHiddenStates, ...
                                 'dropOutRate',  Params(p).dropOut,...
                                 'useBatchNorm', true,...
-                                'leak', 0.1);
+                                'leak', 0.1,...
+                                'loss', riskType);
                 Net.initParams();
 
                 % Meta ... info about data and the prediction model
@@ -141,7 +176,7 @@ function run_train_conf_hinge_mlp( dataSet, setting, trnData )
                 [Net,Stats]  = conf_cnn_train_dag( Net, ImDb, getBatch, Meta, Opts ) ;                                
                 
                 % load the best model
-                [bestEpochObjVal,bestEpoch] = min([Stats.val(:).objective]);
+                [bestEpochAuRC,bestEpoch] = min([Stats.val(:).auRC]);
                 Tmp  = load( sprintf('%snet-epoch-%d.mat', modelFolder, bestEpoch), 'net');
                 Net  = dagnn.DagNN.loadobj( Tmp.net) ;
                 

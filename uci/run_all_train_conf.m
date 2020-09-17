@@ -2,7 +2,20 @@ run('../selclassif_setpath.m');;
 
 dataSet = {'avila1', 'codrna1','covtype1','ijcnn1','letter1',...
            'pendigit1', 'phishing1', 'sattelite1','sensorless1','shuttle1' };
-    
+
+       
+%% MLP conf rule trained on LR; uses logistic approximation of SELE
+for i = 1 : numel( dataSet )
+    run_train_conf_hinge_mlp( dataSet{i}, 'lr+hinge2+zmuv' );
+end
+
+%% MLP conf rule trained on SVM; uses logistic approximation of SELE
+for i = 1 : numel( dataSet )
+    run_train_conf_hinge_mlp( dataSet{i}, 'msvmlin+hinge2+zmuv' );
+end
+       
+       
+       
 %% MLP conf rule trained on LR using logistic regression loss
 for i = 1 : numel( dataSet )
     run_train_conf_logistic_mlp( dataSet{i}, 'lr+zmuv');    

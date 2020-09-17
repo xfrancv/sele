@@ -10,6 +10,7 @@ function Net = init_confnet1(nInputs, nOutputs, nHiddenStates, varargin )
     opts.lab2age      = [];
     opts.lab2gender   = [];
     opts.leak         = 0;
+    opts.loss         = 1;
     opts = vl_argparse(opts, varargin) ;
 
     rng('default');
@@ -44,7 +45,14 @@ function Net = init_confnet1(nInputs, nOutputs, nHiddenStates, varargin )
     
     
     %% Loss functions
-    Net.addLayer('rankloss', dagnn.LossRank(), {'prediction','risk','predY'}, 'objective' );
+    switch opts.loss
+        case 1
+            Net.addLayer('rankloss', dagnn.LossRank(), {'prediction','risk','predY'}, 'objective' );
+        case 2
+            Net.addLayer('rankloss', dagnn.LossRankLog(), {'prediction','risk','predY'}, 'objective' );
+    end
+    
+    Net.addLayer('auRC', dagnn.LossAuRC(), {'prediction','risk','predY'}, 'auRC' );
     
     %%
     Net.initParams();
