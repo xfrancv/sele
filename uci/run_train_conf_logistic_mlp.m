@@ -142,7 +142,7 @@ function run_train_conf_logistic_mlp( dataSet, setting, trnData )
                 [Net,Stats]  = conf_cnn_train_dag( Net, ImDb, getBatch, Meta, Opts ) ;                                
                 
                 % load the best model
-                [bestEpochObjVal,bestEpoch] = min([Stats.val(:).objective]);
+                [bestEpochAuRC,bestEpoch] = min([Stats.val(:).auRC]);
                 Tmp  = load( sprintf('%snet-epoch-%d.mat', modelFolder, bestEpoch), 'net');
                 Net  = dagnn.DagNN.loadobj( Tmp.net) ;
                 

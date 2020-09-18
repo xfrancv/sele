@@ -13,8 +13,7 @@ end
 for i = 1 : numel( dataSet )
     run_train_conf_hinge_mlp( dataSet{i}, 'msvmlin+hinge2+zmuv' );
 end
-       
-       
+
        
 %% MLP conf rule trained on LR using logistic regression loss
 for i = 1 : numel( dataSet )

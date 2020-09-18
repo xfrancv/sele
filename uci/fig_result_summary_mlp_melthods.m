@@ -42,6 +42,9 @@ for i = 1 : numel( dataSet )
     Exp1(i).Result(end+1).name  = 'LR+sele(mlp)';
     Exp1(i).Result(end).fname   = ['results/lr/' dataSet{i} '/conf_hinge1_mlp_zmuv1/results.mat'];
 
+%     Exp1(i).Result(end+1).name  = 'LR+log sele(mlp)';
+%     Exp1(i).Result(end).fname   = ['results/lr/' dataSet{i} '/conf_hinge2_mlp_zmuv1/results.mat'];
+
     Exp1(i).Result(end+1).name  = 'LR+logistic(mlp)';
     Exp1(i).Result(end).fname   = ['results/lr/' dataSet{i} '/conf_logistic_mlp_zmuv1/results.mat'];
 
@@ -52,6 +55,9 @@ for i = 1 : numel( dataSet )
 
     Exp2(i).Result(end+1).name  = 'SVM+sele(mlp)';
     Exp2(i).Result(end).fname   = ['results/msvmlin/' dataSet{i} '/conf_hinge1_mlp_zmuv1/results.mat'];
+
+%     Exp2(i).Result(end+1).name  = 'SVM+log sele(mlp)';
+%     Exp2(i).Result(end).fname   = ['results/msvmlin/' dataSet{i} '/conf_hinge2_mlp_zmuv1/results.mat'];
 
     Exp2(i).Result(end+1).name  = 'SVM+logistic(mlp)';
     Exp2(i).Result(end).fname   = ['results/msvmlin/' dataSet{i} '/conf_logistic_mlp_zmuv1/results.mat'];

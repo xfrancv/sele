@@ -44,6 +44,9 @@ function Net = init_confnet_logistic(nInputs, nOutputs, nHiddenStates, varargin 
     %% Loss functions
     Net.addLayer('rankloss', dagnn.LossLogisticSwitch(), {'prediction','loss','predY'}, 'objective' );
     
+    Net.addLayer('auRC', dagnn.LossAuRC(), {'prediction','loss','predY'}, 'auRC' );
+    
+    
     %%
     Net.initParams();
 end
