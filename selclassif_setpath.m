@@ -13,6 +13,7 @@ function setup_matconvnet(rootFolder)
    
    addpath( rootFolder );
    addpath( [rootFolder 'src/']);
+   addpath( [rootFolder 'ordreg/src/']);
    addpath( [rootFolder '3rdparty/libsvm-3.1/']);
    addpath( [rootFolder '3rdparty/libocas/']);
    
