@@ -10,7 +10,7 @@ function Data = take_trn2_data( Data, trnData)
             trnDataPercent = trnData*100;
         else
             N = numel( Data.Split(s).trn2 );
-            trnDataPercent = 100*trnData/N;
+            trnDataPercent = min(100*trnData/N,100);
         end
 
         idx = [];
