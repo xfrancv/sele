@@ -1,42 +1,43 @@
-function run_train_conf_hinge_mlp( dataSet, setting, batchSize, trnData )
+function run_train_conf_regression_mlp( dataSet, setting, trnData )
 
     if nargin < 1
         dataSet = 'abalone1';
-        setting = 'hinge1+zmuv'; 
-        batchSize = 100;
+        setting = 'zmuv'; 
     end
 
     switch setting
-        case 'hinge1+zmuv'
+        case 'zmuv'
             Data        = load( ['data/' dataSet '.mat'], 'X','Y','Split' );
             rootFolder  = ['results/svorimc/' dataSet '/'];
             
             Params = [];
             for nLayers = [0 2 5]
-                Params(end+1).nLayers = nLayers;
-                Params(end).batchSize = batchSize;
-                Params(end).learningRate = 0.001;
-                Params(end).dropOut      = [];
+                for batchSize = [100]
+                    Params(end+1).nLayers = nLayers;
+                    Params(end).batchSize = batchSize;
+                    Params(end).learningRate = 0.001;
+                    Params(end).dropOut      = [];
+                end
             end
             numEpochs = 300;
             riskType    = 1;
             zmuvNorm    = 1;      
-        
+      
     end
 
     %%
     if nargin >= 3
-        Data = take_trn2_data( Data, trnData );
-        outFolder = sprintf('%sconf_hinge%d_mlp_zmuv%d_bs%d_trn%.f/', rootFolder, riskType, zmuvNorm, batchSize, trnData );
+        Data = take_trn2_data( Data, trnData);
+        outFolder = sprintf('%sconf_regression_mlp_zmuv%d_trn%.f/', rootFolder, zmuvNorm, trnData );
     else
-        outFolder = sprintf('%sconf_hinge%d_mlp_zmuv%d_bs%d/', rootFolder, riskType, zmuvNorm, batchSize );
-    end            
+        outFolder = sprintf('%sconf_regression_mlp_zmuv%d/', rootFolder, zmuvNorm );
+    end
 
-    
     %%
     if ~exist( outFolder ), mkdir( outFolder ); end
 
 
+    
     %%
     nSplits = numel( Data.Split );
     N       = size( Data.X, 2);
@@ -86,9 +87,9 @@ function run_train_conf_hinge_mlp( dataSet, setting, batchSize, trnData )
                 nY    = max( Data.Y );
                 
                 ImDb.images.data  = reshape( [trnX valX], [1 1 nDims nTrn+nVal] );
-                ImDb.images.risk  = [trnPredLoss ; valPredLoss];
-                ImDb.images.predY = [trnPredY ; valPredY];
-                
+                ImDb.images.loss  = [trnPredLoss ; valPredLoss];
+                ImDb.images.predY = [trnPredY; valPredY];
+                                
                 ImDb.trnIdx = [1:nTrn];
                 ImDb.valIdx = [1:nVal]+nTrn;
                 
@@ -99,11 +100,10 @@ function run_train_conf_hinge_mlp( dataSet, setting, batchSize, trnData )
                     nHiddenStates = nDims*ones(1,Params(p).nLayers);
                 end
                 
-                Net  =  init_confnet1( nDims, nY, nHiddenStates, ...
+                Net  =  init_confnet_regression( nDims, nY, nHiddenStates, ...
                                 'dropOutRate',  Params(p).dropOut,...
                                 'useBatchNorm', true,...
-                                'leak', 0.1,...
-                                'loss', riskType);
+                                'leak', 0.1);
                 Net.initParams();
 
                 % Meta ... info about data and the prediction model
@@ -120,7 +120,7 @@ function run_train_conf_hinge_mlp( dataSet, setting, batchSize, trnData )
                 
                 Opts.train = ImDb.trnIdx;
                 Opts.val   = ImDb.valIdx;
-                getBatch   = @(a,b) getBatchConfDag(Opts, a, b);
+                getBatch   = @(a,b) getBatchConfLogisticDag(Opts, a, b);
 
                 [Net,Stats]  = conf_cnn_train_dag( Net, ImDb, getBatch, Meta, Opts ) ;                                
                 
@@ -130,20 +130,19 @@ function run_train_conf_hinge_mlp( dataSet, setting, batchSize, trnData )
                 Net  = dagnn.DagNN.loadobj( Tmp.net) ;
                 
                 conf = confcnn_predict( ImDb, Net, nY, 100, getBatch );   
-
-
+                
                 [~,idx] = sort( conf( ImDb.valIdx) );
                 valRiskCurve = cumsum( valPredLoss(idx))./[1:nVal]';
                 valAuc  = mean( valRiskCurve );                
                 valLoss  = sum( cumsum( valPredLoss(idx) ))/(nVal^2);
                 
+
                 [~,idx] = sort( conf(ImDb.trnIdx) );
                 trnRiskCurve = cumsum( trnPredLoss(idx))./[1:nTrn]';
                 trnAuc  = mean( trnRiskCurve );                
                 trnLoss  = sum( cumsum( trnPredLoss(idx)))/(nTrn^2);
-                
 
-                fprintf('trnLoss=%.4f, valLoss =%.4f\n', trnLoss, valLoss);
+                fprintf('trnAuc=%.4f, valAuc =%.4f, trnLoss=%.4f, valLoss=%.4f\n', trnAuc, valAuc, trnLoss, valLoss);
 
                 save( modelFile, 'Net', 'trnLoss', 'valLoss', 'T', 'trnAuc', 'valAuc' );
                 
@@ -171,8 +170,8 @@ function run_train_conf_hinge_mlp( dataSet, setting, batchSize, trnData )
     if numMissing
         return;
     end
-
-    %
+    
+    %%
     % erase intermediate NN models
     for split = 1 : nSplits
         for p = 1 : numel( Params) 
@@ -188,6 +187,7 @@ function run_train_conf_hinge_mlp( dataSet, setting, batchSize, trnData )
         end
     end
     
+    
     %% Collect results
     trnAuc = zeros( numel( Params ), nSplits );
     valAuc = zeros( numel( Params ), nSplits );
@@ -202,13 +202,13 @@ function run_train_conf_hinge_mlp( dataSet, setting, batchSize, trnData )
     end
 
     %% Find best lambda
-    fprintf('split   param                          trnAuc   valAuc\n');
+    fprintf('split   param                          trnAuc    valAuc\n');
     bestParams   = nan*ones(nSplits,1);
     for split = 1 : nSplits
         [~,idx ] = min( valAuc(:,split));
         bestParams(split) = idx;
         fprintf('%d        %2d   %30s           %.4f   %.4f\n', split, idx, ...
-            mlp_param_str(Params(idx)), trnAuc(idx,split), valAuc(idx,split));
+            mlp_param_str(Params(idx)), trnAuc(idx,split),valAuc(idx,split));
     end
 
     fprintf('    param    trnAuc          valAuc\n');
@@ -251,7 +251,7 @@ function run_train_conf_hinge_mlp( dataSet, setting, batchSize, trnData )
             end
     
             Opts.gpus      = [];
-            getBatch       = @(a,b) getBatchConfDag(Opts, a, b, 1);            
+            getBatch       = @(a,b) getBatchConfLogisticDag(Opts, a, b, 1);         
             uncertainty    = confcnn_predict(ImDb, Net, nY, 100, getBatch );   
             
             tstPredLoss    = predLoss( tstIdx);
