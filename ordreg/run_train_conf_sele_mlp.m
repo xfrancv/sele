@@ -28,9 +28,9 @@ function run_train_conf_sele_mlp( dataSet, setting, trnData )
     %%
     if nargin >= 3
         Data = take_trn2_data( Data, trnData );
-        outFolder = sprintf('%sconf_hinge%d_mlp_zmuv%d_trn%.f/', rootFolder, riskType, zmuvNorm, trnData );
+        outFolder = sprintf('%sconf_sele%d_mlp_zmuv%d_trn%.f/', rootFolder, riskType, zmuvNorm, trnData );
     else
-        outFolder = sprintf('%sconf_hinge%d_mlp_zmuv%d/', rootFolder, riskType, zmuvNorm );
+        outFolder = sprintf('%sconf_sele%d_mlp_zmuv%d/', rootFolder, riskType, zmuvNorm );
     end            
 
     

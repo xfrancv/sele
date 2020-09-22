@@ -17,7 +17,7 @@ function run_train_conf_sele_quad( dataSet, setting, trnData )
 
             Params = [];
             for lambda = [10 100 ]
-                for batchSize = [100 500]
+                for batchSize = [50 100 500 1000]
                     Params(end+1).lambda = lambda;
                     Params(end).batchSize = batchSize;
                 end
