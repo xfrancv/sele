@@ -29,7 +29,7 @@ for i = 1 : numel( dataSet )
 end
 
 %%
-for i = 1 : numel( dataSet )
+for i = 1 : numel( dataSet )u
     for trnData = dataSet{i}{2}
         run_train_conf_regression_quad( dataSet{i}{1}, 'zmuv', trnData);    
     end

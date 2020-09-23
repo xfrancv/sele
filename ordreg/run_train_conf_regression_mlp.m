@@ -12,7 +12,7 @@ function run_train_conf_regression_mlp( dataSet, setting, trnData )
             
             Params = [];
             for nLayers = [0 2 5]
-                for batchSize = [100]
+                for batchSize = [50 100 200]
                     Params(end+1).nLayers = nLayers;
                     Params(end).batchSize = batchSize;
                     Params(end).learningRate = 0.001;
