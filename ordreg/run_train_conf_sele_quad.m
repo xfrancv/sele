@@ -16,7 +16,7 @@ function run_train_conf_sele_quad( dataSet, setting, trnData )
             rootFolder  = ['results/svorimc/' dataSet '/'];
 
             Params = [];
-            for lambda = [10 100 ]
+            for lambda = [1 10 100 1000]
                 for batchSize = [50 100 500 1000]
                     Params(end+1).lambda = lambda;
                     Params(end).batchSize = batchSize;
