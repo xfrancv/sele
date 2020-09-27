@@ -1,5 +1,5 @@
 
-dataFolder = '../data/';
+dataFolder = 'data/';
 
 %%
 List = dir( dataFolder );
