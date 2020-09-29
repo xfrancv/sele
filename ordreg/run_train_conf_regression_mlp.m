@@ -3,6 +3,7 @@ function run_train_conf_regression_mlp( dataSet, setting, trnData )
     if nargin < 1
         dataSet = 'abalone1';
         setting = 'zmuv'; 
+        trnData = 100;
     end
 
     switch setting

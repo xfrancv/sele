@@ -2,11 +2,15 @@ function run_train_conf_sele_mlp( dataSet, setting, trnData )
 
     if nargin < 1
         dataSet = 'abalone1';
-        setting = 'hinge1+zmuv'; 
+        setting = 'hinge3+zmuv'; 
     end
 
-    switch setting
-        case 'hinge1+zmuv'
+    riskType = str2num( setting(6) );
+    csetting = setting;
+    csetting(6) = [];
+    
+    switch csetting
+        case 'hinge+zmuv'
             Data        = load( ['data/' dataSet '.mat'], 'X','Y','Split' );
             rootFolder  = ['results/svorimc/' dataSet '/'];
             
@@ -20,7 +24,7 @@ function run_train_conf_sele_mlp( dataSet, setting, trnData )
                 end
             end
             numEpochs = 300;
-            riskType    = 1;
+%            riskType    = 1;
             zmuvNorm    = 1;      
         
     end

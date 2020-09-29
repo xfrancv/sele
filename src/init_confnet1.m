@@ -50,6 +50,8 @@ function Net = init_confnet1(nInputs, nOutputs, nHiddenStates, varargin )
             Net.addLayer('rankloss', dagnn.LossRank(), {'prediction','risk','predY'}, 'objective' );
         case 2
             Net.addLayer('rankloss', dagnn.LossRankLog(), {'prediction','risk','predY'}, 'objective' );
+        case 3
+            Net.addLayer('rankloss', dagnn.LossSele(), {'prediction','risk','predY'}, 'objective' );
     end
     
     Net.addLayer('auRC', dagnn.LossAuRC(), {'prediction','risk','predY'}, 'auRC' );
