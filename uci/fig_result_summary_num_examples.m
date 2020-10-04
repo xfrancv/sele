@@ -29,8 +29,8 @@ dataSet = {{'avila1', [100 500 1000 5000]}, ...
 %     'shuttle1', ...
 %     }
 
-methodSuffix1 = {'_linear_zmuv1_th5','_quad_zmuv1_th5','_mlp_zmuv1'};
-methodSuffix2 = {'_linear_zmuv1','_quad_zmuv1','_mlp_zmuv1'};
+methodSuffix1 = {'_linear_zmuv1','_mlp_zmuv1'};
+methodSuffix2 = {'_linear_zmuv1','_mlp_zmuv1'};
 
 %
 if ~exist(outFolder ), mkdir( outFolder ); end
@@ -56,7 +56,7 @@ for m=1:numel(methodSuffix1)
         Exp1(e).Result(1).fnamePrefix  = sprintf('results/lr/%s/conf_logistic%s', dataSet{e}{1}, methodSuffix2{m});
         Exp1(e).Result(1).trnData = dataSet{e}{2};
         Exp1(e).Result(2).name = sprintf('LR+sele(%s)', expName);
-        Exp1(e).Result(2).fnamePrefix  = sprintf('results/lr/%s/conf_hinge1%s',dataSet{e}{1}, methodSuffix1{m} );
+        Exp1(e).Result(2).fnamePrefix  = sprintf('results/lr/%s/conf_sele1%s',dataSet{e}{1}, methodSuffix1{m} );
         Exp1(e).Result(2).trnData = dataSet{e}{2};
 
         Exp2(e).dataset = dataSet{e}{1};
@@ -64,7 +64,7 @@ for m=1:numel(methodSuffix1)
         Exp2(e).Result(1).fnamePrefix  = sprintf('results/msvmlin/%s/conf_logistic%s', dataSet{e}{1}, methodSuffix2{m});
         Exp2(e).Result(1).trnData = dataSet{e}{2};
         Exp2(e).Result(2).name = sprintf('SVM+sele(%s)', expName);
-        Exp2(e).Result(2).fnamePrefix  = sprintf('results/msvmlin/%s/conf_hinge1%s', dataSet{e}{1}, methodSuffix1{m} );
+        Exp2(e).Result(2).fnamePrefix  = sprintf('results/msvmlin/%s/conf_sele1%s', dataSet{e}{1}, methodSuffix1{m} );
         Exp2(e).Result(2).trnData = dataSet{e}{2};
     end
 

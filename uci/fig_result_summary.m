@@ -40,13 +40,10 @@ for i = 1 : numel( dataSet )
     Exp1(i).Result(1).fname = ['results/lr/' dataSet{i} '/results.mat'];
 
     Exp1(i).Result(end+1).name = 'LR+learn(linear)';
-    Exp1(i).Result(end).fname  = ['results/lr/' dataSet{i} '/conf_hinge1_linear_zmuv1_th5/results.mat'];
-    
-    Exp1(i).Result(end+1).name  = 'LR+learn(quad)';
-    Exp1(i).Result(end).fname   = ['results/lr/' dataSet{i} '/conf_hinge1_quad_zmuv1_th5/results.mat'];
+    Exp1(i).Result(end).fname  = ['results/lr/' dataSet{i} '/conf_sele1_linear_zmuv1/results.mat'];
     
     Exp1(i).Result(end+1).name  = 'LR+learn(mlp)';
-    Exp1(i).Result(end).fname   = ['results/lr/' dataSet{i} '/conf_hinge1_mlp_zmuv1/results.mat'];
+    Exp1(i).Result(end).fname   = ['results/lr/' dataSet{i} '/conf_sele1_mlp_zmuv1/results.mat'];
 
     
     Exp2(i).dataset = dataSet{i};
@@ -54,13 +51,10 @@ for i = 1 : numel( dataSet )
     Exp2(i).Result(1).fname   = ['results/msvmlin/' dataSet{i} '/results.mat'];
 
     Exp2(i).Result(end+1).name  = 'SVM+sele(linear)';
-    Exp2(i).Result(end).fname   = ['results/msvmlin/' dataSet{i} '/conf_hinge1_linear_zmuv1_th5/results.mat'];
-
-    Exp2(i).Result(end+1).name  = 'SVM+sele(quad)';
-    Exp2(i).Result(end).fname   = ['results/msvmlin/' dataSet{i} '/conf_hinge1_quad_zmuv1_th5/results.mat'];
+    Exp2(i).Result(end).fname   = ['results/msvmlin/' dataSet{i} '/conf_sele1_linear_zmuv1/results.mat'];
 
     Exp2(i).Result(end+1).name  = 'SVM+sele(mlp)';
-    Exp2(i).Result(end).fname   = ['results/msvmlin/' dataSet{i} '/conf_hinge1_mlp_zmuv1/results.mat'];
+    Exp2(i).Result(end).fname   = ['results/msvmlin/' dataSet{i} '/conf_sele1_mlp_zmuv1/results.mat'];
         
 end
 
