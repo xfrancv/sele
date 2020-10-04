@@ -1,0 +1,10 @@
+#!/bin/sh
+#SBATCH --partition=cpu
+#SBATCH --mail-user=xfrancv@cmp.felk.cvut.cz
+#SBATCH --output=run_all_train_conf.log
+
+ml MATLAB/9.4
+ml libjpeg-turbo
+ml CUDA/9.2.88-GCC-7.3.0-2.30
+srun -l matlab -nodesktop -nodisplay -r "run /home/xfrancv/Work/SelectiveClassification/sele_journal.github/uci/run_all_train_conf.m"
+
