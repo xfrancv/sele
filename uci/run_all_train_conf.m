@@ -20,16 +20,11 @@ dataSet = {{'avila1', [100 500 1000 5000 6258]}, ...
 for i = 1 : numel( dataSet )
     for trnData = dataSet{i}{2}
         run_train_conf_logistic_linear( dataSet{i}{1}, 'lr+zmuv', trnData);    
-        run_train_conf_logistic_quad( dataSet{i}{1}, 'lr+zmuv', trnData);    
+%        run_train_conf_logistic_quad( dataSet{i}{1}, 'lr+zmuv', trnData);    
         run_train_conf_logistic_mlp( dataSet{i}{1}, 'lr+zmuv', trnData);    
-    end
-end
 
-%% linear/quad/mlp conf rule trained on MSVMLIN
-for i = 1 : numel( dataSet )
-    for trnData = dataSet{i}{2}
         run_train_conf_logistic_linear( dataSet{i}{1}, 'msvmlin+zmuv', trnData);    
-        run_train_conf_logistic_quad( dataSet{i}{1}, 'msvmlin+zmuv', trnData);    
+%        run_train_conf_logistic_quad( dataSet{i}{1}, 'msvmlin+zmuv', trnData);    
         run_train_conf_logistic_mlp( dataSet{i}{1}, 'msvmlin+zmuv', trnData);    
     end
 end
@@ -37,25 +32,20 @@ end
 %% linear/quad/mlp conf rule trained on LR
 for i = 1 : numel( dataSet )
     for trnData = dataSet{i}{2}
-        run_train_conf_sele_linear( dataSet{i}{1}, 'lr+hinge1+zmuv', trnData);    
-        run_train_conf_sele_quad( dataSet{i}{1}, 'lr+hinge1+zmuv', trnData);    
-        run_train_conf_sele_mlp( dataSet{i}{1}, 'lr+hinge1+zmuv', trnData);    
+        run_train_conf_sele_linear( dataSet{i}{1}, 'lr+sele1+zmuv', trnData);    
+        run_train_conf_sele_linear( dataSet{i}{1}, 'lr+sele2+zmuv', trnData);    
+%        run_train_conf_sele_quad( dataSet{i}{1}, 'lr+sele1+zmuv', trnData);    
+        run_train_conf_sele_mlp( dataSet{i}{1}, 'lr+sele1+zmuv', trnData);    
+
+        run_train_conf_sele_linear( dataSet{i}{1}, 'msvmlin+sele1+zmuv', trnData);    
+        run_train_conf_sele_linear( dataSet{i}{1}, 'msvmlin+sele2+zmuv', trnData);    
+%        run_train_conf_sele_quad( dataSet{i}{1}, 'msvmlin+sele1+zmuv', trnData);    
+        run_train_conf_sele_mlp( dataSet{i}{1}, 'msvmlin+sele1+zmuv', trnData);    
     end
 end
 
-%% linear/quad/mlp conf rule trained on MSVMLIN
-for i = 1 : numel( dataSet )
-    for trnData = dataSet{i}{2}
-        run_train_conf_sele_linear( dataSet{i}{1}, 'msvmlin+hinge1+zmuv', trnData);    
-        run_train_conf_sele_quad( dataSet{i}{1}, 'msvmlin+hinge1+zmuv', trnData);    
-        run_train_conf_sele_mlp( dataSet{i}{1}, 'msvmlin+hinge1+zmuv', trnData);    
-    end
-end
 
 %%
 if ~strcmpi( 'HAL', hostname )
     exit();
 end
-
-
-

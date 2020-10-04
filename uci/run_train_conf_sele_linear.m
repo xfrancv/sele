@@ -4,13 +4,15 @@ function run_train_conf_sele_linear( dataSet, setting, trnData )
 %
 
     if nargin < 1
-        dataSet = 'codrna1';
-        setting = 'msvmlin+hinge1+zmuv';
+        dataSet = 'avila1';
+        setting = 'msvmlin+sele1+zmuv';
     end
     
-    switch setting
+    [benchmark,riskType,zmuvNorm] = parse_sele_opt(setting);
+    
+    switch benchmark
         
-        case 'lr+hinge1+zmuv';
+        case 'lr';
 
             Data        = load( ['../data/' dataSet '.mat'], 'X','Y','Split' );
             rootFolder  = ['results/lr/' dataSet '/'];
@@ -25,10 +27,8 @@ function run_train_conf_sele_linear( dataSet, setting, trnData )
 
             Opt.verb    = 1;   
             Opt.tolRel  = 0.01;
-            riskType    = 1;
-            zmuvNorm    = 1;
 
-        case 'msvmlin+hinge1+zmuv';
+        case 'msvmlin';
 
             Data        = load( ['../data/' dataSet '.mat'], 'X','Y','Split' );
             rootFolder  = ['results/msvmlin/' dataSet '/'];
@@ -43,8 +43,6 @@ function run_train_conf_sele_linear( dataSet, setting, trnData )
 
             Opt.verb    = 1;   
             Opt.tolRel  = 0.01;
-            riskType    = 1;
-            zmuvNorm    = 1;
     end
     
     %%
@@ -124,7 +122,7 @@ function run_train_conf_sele_linear( dataSet, setting, trnData )
                         case 1
                             [W, Stat] = bmrm( RrData, @risk_rrank_par, lambda, Opt );                                
                         case 2
-                            [W, Stat] = bmrm( RrData, @risk_rrank2, lambda, Opt );
+                            [W, Stat] = bmrm( RrData, @risk_rrank2_par, lambda, Opt );
                     end
                 else
                     boxConstr = ones( size(RrData.X,1),1)*1000;

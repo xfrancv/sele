@@ -6,7 +6,7 @@ function run_train_conf_hinge_mlp( dataSet, setting, trnData )
     end
 
     switch setting
-        case 'msvmlin+hinge1+zmuv'
+        case 'msvmlin+sele1+zmuv'
             Data        = load( ['../data/' dataSet '.mat'], 'X','Y','Split' );
             rootFolder  = ['results/msvmlin/' dataSet '/'];
             
@@ -22,7 +22,7 @@ function run_train_conf_hinge_mlp( dataSet, setting, trnData )
             numEpochs = 300;
             riskType    = 1;
             zmuvNorm    = 1;      
-        case 'msvmlin+hinge2+zmuv'
+        case 'msvmlin+sele2+zmuv'
             Data        = load( ['../data/' dataSet '.mat'], 'X','Y','Split' );
             rootFolder  = ['results/msvmlin/' dataSet '/'];
             
@@ -39,7 +39,7 @@ function run_train_conf_hinge_mlp( dataSet, setting, trnData )
             riskType    = 2;
             zmuvNorm    = 1;      
       
-        case 'lr+hinge1+zmuv'
+        case 'lr+sele1+zmuv'
             Data        = load( ['../data/' dataSet '.mat'], 'X','Y','Split' );
             rootFolder  = ['results/lr/' dataSet '/'];
             
@@ -56,7 +56,7 @@ function run_train_conf_hinge_mlp( dataSet, setting, trnData )
             riskType    = 1;
             zmuvNorm    = 1;
             
-        case 'lr+hinge2+zmuv'
+        case 'lr+sele2+zmuv'
             Data        = load( ['../data/' dataSet '.mat'], 'X','Y','Split' );
             rootFolder  = ['results/lr/' dataSet '/'];
             
@@ -79,9 +79,9 @@ function run_train_conf_hinge_mlp( dataSet, setting, trnData )
     %%
     if nargin >= 3
         Data = take_trn2_data( Data, trnData );
-        outFolder = sprintf('%sconf_hinge%d_mlp_zmuv%d_trn%.f/', rootFolder, riskType, zmuvNorm, trnData );
+        outFolder = sprintf('%sconf_sele%d_mlp_zmuv%d_trn%.f/', rootFolder, riskType, zmuvNorm, trnData );
     else
-        outFolder = sprintf('%sconf_hinge%d_mlp_zmuv%d/', rootFolder, riskType, zmuvNorm );
+        outFolder = sprintf('%sconf_sele%d_mlp_zmuv%d/', rootFolder, riskType, zmuvNorm );
     end
     
     %%

@@ -13,33 +13,16 @@ dataSet = {{'avila1', [100 500 1000 5000]}, ...
            {'sensorless1',[100 500 1000 5000 10000 15000]},...
            {'shuttle1',[100 500 1000 5000 10000 15000]} };
 
-% dataSet = {...
-%      'codrna1'}; 
-%  ,...
-%      'avila1'}; 
-%  , ...
-%     'codrna1',...
-%     'covtype1',...
-%     'ijcnn1',...
-%     'letter1', ...
-%     'pendigit1',...
-%     'phishing1',...
-%     'sattelite1',...
-%     'sensorless1',...
-%     'shuttle1', ...
-%     }
-
-methodSuffix1 = {'_linear_zmuv1','_mlp_zmuv1'};
-methodSuffix2 = {'_linear_zmuv1','_mlp_zmuv1'};
+methodSuffix = {'_linear_zmuv1','_mlp_zmuv1'};
 
 %
 if ~exist(outFolder ), mkdir( outFolder ); end
 
 
-for m=1:numel(methodSuffix1)
+for m=1:numel(methodSuffix)
 
 
-    expName = methodSuffix1{m};
+    expName = methodSuffix{m};
     idx = find( expName == '_');
     expName = expName(idx(1)+1:idx(2)-1);
     fprintf('[[%s]]\n', expName);
@@ -53,18 +36,18 @@ for m=1:numel(methodSuffix1)
     for e = 1 : numel( dataSet )
         Exp1(e).dataset = dataSet{e}{1};
         Exp1(e).Result(1).name = sprintf('LR+logistic(%s)', expName);
-        Exp1(e).Result(1).fnamePrefix  = sprintf('results/lr/%s/conf_logistic%s', dataSet{e}{1}, methodSuffix2{m});
+        Exp1(e).Result(1).fnamePrefix  = sprintf('results/lr/%s/conf_logistic%s', dataSet{e}{1}, methodSuffix{m});
         Exp1(e).Result(1).trnData = dataSet{e}{2};
         Exp1(e).Result(2).name = sprintf('LR+sele(%s)', expName);
-        Exp1(e).Result(2).fnamePrefix  = sprintf('results/lr/%s/conf_sele1%s',dataSet{e}{1}, methodSuffix1{m} );
+        Exp1(e).Result(2).fnamePrefix  = sprintf('results/lr/%s/conf_sele1%s',dataSet{e}{1}, methodSuffix{m} );
         Exp1(e).Result(2).trnData = dataSet{e}{2};
 
         Exp2(e).dataset = dataSet{e}{1};
         Exp2(e).Result(1).name = sprintf('SVM+logistic(%s)', expName);
-        Exp2(e).Result(1).fnamePrefix  = sprintf('results/msvmlin/%s/conf_logistic%s', dataSet{e}{1}, methodSuffix2{m});
+        Exp2(e).Result(1).fnamePrefix  = sprintf('results/msvmlin/%s/conf_logistic%s', dataSet{e}{1}, methodSuffix{m});
         Exp2(e).Result(1).trnData = dataSet{e}{2};
         Exp2(e).Result(2).name = sprintf('SVM+sele(%s)', expName);
-        Exp2(e).Result(2).fnamePrefix  = sprintf('results/msvmlin/%s/conf_sele1%s', dataSet{e}{1}, methodSuffix1{m} );
+        Exp2(e).Result(2).fnamePrefix  = sprintf('results/msvmlin/%s/conf_sele1%s', dataSet{e}{1}, methodSuffix{m} );
         Exp2(e).Result(2).trnData = dataSet{e}{2};
     end
 
@@ -125,16 +108,16 @@ for m=1:numel(methodSuffix1)
 
         axes(ha1);
         grid on;
-        xlabel('cover');
-        ylabel('risk');
+        xlabel('#trn examples');
+        ylabel('auRC');
         legend( h1, str1,'Location','northeast' );
         h=gca;
         h.FontSize=15;
 
         axes(ha2);
         grid on;
-        xlabel('cover');
-        ylabel('risk');
+        xlabel('#trn examples');
+        ylabel('auRC');
         legend( h2, str2,'Location','northeast' );
         h=gca;
         h.FontSize=15;
