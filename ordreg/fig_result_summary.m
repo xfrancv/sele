@@ -40,21 +40,12 @@ for d = 1 : numel( dataSet )
         Exp{1}.Result(end+1).name  = sprintf('reg(linear),n=%d',dataSet{d}{2}(n)) ;
         Exp{1}.Result(end).fname   = sprintf('results/svorimc/%s/conf_regression_linear_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
 
-%         Exp2.dataset = dataSet{d}{1};
-%         Exp2.Result(1).name = sprintf('sele(quad),n=%d', dataSet{d}{2}(n));
-%         Exp2.Result(1).fname  = sprintf('results/svorimc/%s/conf_sele1_quad_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
-% 
-%         Exp2.Result(end+1).name  = sprintf('reg(quad),n=%d', dataSet{d}{2}(n));
-%         Exp2.Result(end).fname   = sprintf('results/svorimc/%s/conf_regression_quad_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
-
-
-        Exp{2}.dataset = dataSet{d}{1};
-        Exp{2}.Result(1).name = sprintf('sele(mlp),n=%d', dataSet{d}{2}(n));
-        Exp{2}.Result(1).fname  = sprintf('results/svorimc/%s/conf_sele1_mlp_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
-
-        Exp{2}.Result(end+1).name  = sprintf('reg(mlp),n=%d', dataSet{d}{2}(n));
-        Exp{2}.Result(end).fname   = sprintf('results/svorimc/%s/conf_regression_mlp_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
-
+        Exp{1}.Result(end+1).name = sprintf('sele(mlp),n=%d', dataSet{d}{2}(n));
+        Exp{1}.Result(end).fname  = sprintf('results/svorimc/%s/conf_sele1_mlp_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
+        
+        Exp{1}.Result(end+1).name  = sprintf('reg(mlp),n=%d', dataSet{d}{2}(n));
+        Exp{1}.Result(end).fname   = sprintf('results/svorimc/%s/conf_regression_mlp_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
+        
 
         %
         lineStyle = {'r','k','g','b','m','c'};
@@ -111,7 +102,8 @@ for d = 1 : numel( dataSet )
             h.FontSize=15;
 
         end    
-        hf.Position = [520 274 1673 524];
+        title(sprintf('%s (n=%d)', dataSet{d}{1}, dataSet{d}{2}(n)));
+        hf.Position = [618 396 992 815];
         drawnow;
         snapnow;
 

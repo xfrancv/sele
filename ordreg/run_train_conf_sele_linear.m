@@ -99,9 +99,10 @@ function run_train_conf_sele_linear( dataSet, setting, trnData )
                 idx    = randperm(nTrn);
                 from   = 1;
                 nBatches = max(1,round(nTrn/batchSize));
-                for p = 1 : nBatches
-                    to        = round( p*nTrn/nBatches );
-                    RrData{p} = risk_rrank_init(trnX(:,idx(from:to)), trnPredY(idx(from:to)), trnPredLoss(idx(from:to)), nY);
+                %% serious BUG !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                for k = 1 : nBatches
+                    to        = round( k*nTrn/nBatches );
+                    RrData{k} = risk_rrank_init(trnX(:,idx(from:to)), trnPredY(idx(from:to)), trnPredLoss(idx(from:to)), nY);
                     from      = to + 1;
                 end
                 
