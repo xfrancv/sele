@@ -1,4 +1,4 @@
-function run_train_conf_sele_linear( dataSet, setting, trnData )
+function Status = run_train_conf_sele_linear( dataSet, setting, trnData )
 % confidence is modelled by linear function parameters of which found by
 % minimiying SELE loss.
 %
