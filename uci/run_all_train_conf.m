@@ -45,6 +45,12 @@ for i = 1 : numel( dataSet )
     end
 end
 
+%
+idx = find( arrayfun( @(x) ~isempty(x{1}), S) );
+for i = idx
+    fprintf('%s\n', S{i});
+end
+
 
 %%
 if ~strcmpi( 'HAL', hostname )
