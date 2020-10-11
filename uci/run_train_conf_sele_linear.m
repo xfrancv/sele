@@ -177,9 +177,14 @@ function run_train_conf_sele_linear( dataSet, setting, trnData )
             end
         end
     end
+    
     fprintf('#done=%d\n', numDone);
     fprintf('#missing=%d\n', numMissing );
+    Status = [];
     if numMissing
+        if nargin <= 3, trnData = nan; end
+        Status = sprintf('sele_linear: dataset: %s, setting: %s, trnData: %d, #done=%d, #missing=%d',...
+                      dataSet, setting, trnData, numDone, numMissing );
         return;
     end    
     
@@ -286,13 +291,13 @@ function run_train_conf_sele_linear( dataSet, setting, trnData )
     save( outFile, 'tstRiskCurve', 'tstAuc', 'valLoss', 'tstLoss' );
 
     %%
-    figure;
-    plot(  [1:nTst]/nTst, tstRiskCurve );
-    hold on;
-    plot( [1:nTst]/nTst, mean( tstRiskCurve, 2), 'r', 'linewidth', 2);
-    xlabel('cover');
-    ylabel('err');
-    grid on;
+%     figure;
+%     plot(  [1:nTst]/nTst, tstRiskCurve );
+%     hold on;
+%     plot( [1:nTst]/nTst, mean( tstRiskCurve, 2), 'r', 'linewidth', 2);
+%     xlabel('cover');
+%     ylabel('err');
+%     grid on;
 
     return;
 end
