@@ -3,18 +3,16 @@
 
 outFolder = 'figs/';
 
-dataSet = {...
-     'avila1', ...
-    'codrna1',...
-    'covtype1',...
-    'ijcnn1',...
-    'letter1', ...
-    'pendigit1',...
-    'phishing1',...
-    'sattelite1',...
-    'sensorless1',...
-    'shuttle1', ...
-    }
+dataSet = {{'avila1', [100 500 1000 5000]}, ...
+           {'codrna1',[100 500 1000 5000 10000 15000]}, ...
+           {'covtype1',[100 500 1000 5000 10000]}, ...
+           {'ijcnn1',[100 500 1000 5000 10000 14000]},...
+           {'letter1',[100 500 1000 5000]},...
+           {'pendigit1',[100 500 1000 3000]},...
+           {'phishing1',[100 500 1000 3000]},...
+           {'sattelite1',[100 500 1000 1500]},...
+           {'sensorless1',[100 500 1000 5000 10000 15000]},...
+           {'shuttle1',[100 500 1000 5000 10000 15000]} };
 
 legendLoc = {
     'SouthEast',...
@@ -35,33 +33,50 @@ Exp1  = [];
 Exp2 = [];
 
 for i = 1 : numel( dataSet )
-    Exp1(i).dataset = dataSet{i};
+    Exp1(i).dataset = dataSet{i}{1};
     Exp1(i).Result(1).name  = 'LR+plugin';
-    Exp1(i).Result(1).fname = ['results/lr/' dataSet{i} '/results.mat'];
+    Exp1(i).Result(1).fname = ['results/lr/' dataSet{i}{1} '/results.mat'];
 
-    Exp1(i).Result(end+1).name = 'LR+learn(linear)';
-    Exp1(i).Result(end).fname  = ['results/lr/' dataSet{i} '/conf_sele1_linear_zmuv1/results.mat'];
+    Exp1(i).Result(end+1).name = 'LR+sele1(linear)';
+    Exp1(i).Result(end).fname  = ['results/lr/' dataSet{i}{1} sprintf('/conf_sele1_linear_zmuv1_trn%d/results.mat',dataSet{i}{2}(end))];
+
+    Exp1(i).Result(end+1).name = 'LR+sele2(linear)';
+    Exp1(i).Result(end).fname  = ['results/lr/' dataSet{i}{1} sprintf('/conf_sele2_linear_zmuv1_trn%d/results.mat',dataSet{i}{2}(end))];
     
-    Exp1(i).Result(end+1).name  = 'LR+learn(mlp)';
-    Exp1(i).Result(end).fname   = ['results/lr/' dataSet{i} '/conf_sele1_mlp_zmuv1/results.mat'];
+    Exp1(i).Result(end+1).name  = 'LR+sele1(mlp)';
+    Exp1(i).Result(end).fname   = ['results/lr/' dataSet{i}{1} sprintf('/conf_sele1_mlp_zmuv1_trn%d/results.mat',dataSet{i}{2}(end))];
+
+    Exp1(i).Result(end+1).name = 'LR+logistic(linear)';
+    Exp1(i).Result(end).fname  = ['results/lr/' dataSet{i}{1} sprintf('/conf_logistic_linear_zmuv1_trn%d/results.mat',dataSet{i}{2}(end))];
+
+    Exp1(i).Result(end+1).name = 'LR+logistic(mlp)';
+    Exp1(i).Result(end).fname  = ['results/lr/' dataSet{i}{1} sprintf('/conf_logistic_mlp_zmuv1_trn%d/results.mat',dataSet{i}{2}(end))];
 
     
-    Exp2(i).dataset = dataSet{i};
+    Exp2(i).dataset = dataSet{i}{1};
     Exp2(i).Result(1).name  = 'SVM+maxscore';
-    Exp2(i).Result(1).fname   = ['results/msvmlin/' dataSet{i} '/results.mat'];
+    Exp2(i).Result(1).fname   = ['results/msvmlin/' dataSet{i}{1} '/results.mat'];
 
-    Exp2(i).Result(end+1).name  = 'SVM+sele(linear)';
-    Exp2(i).Result(end).fname   = ['results/msvmlin/' dataSet{i} '/conf_sele1_linear_zmuv1/results.mat'];
+    Exp2(i).Result(end+1).name  = 'SVM+sele1(linear)';
+    Exp2(i).Result(end).fname   = ['results/msvmlin/' dataSet{i}{1} sprintf('/conf_sele1_linear_zmuv1_trn%d/results.mat',dataSet{i}{2}(end))];
 
-    Exp2(i).Result(end+1).name  = 'SVM+sele(mlp)';
-    Exp2(i).Result(end).fname   = ['results/msvmlin/' dataSet{i} '/conf_sele1_mlp_zmuv1/results.mat'];
+    Exp2(i).Result(end+1).name  = 'SVM+sele2(linear)';
+    Exp2(i).Result(end).fname   = ['results/msvmlin/' dataSet{i}{1} sprintf('/conf_sele2_linear_zmuv1_trn%d/results.mat',dataSet{i}{2}(end))];
+
+    Exp2(i).Result(end+1).name  = 'SVM+sele1(mlp)';
+    Exp2(i).Result(end).fname   = ['results/msvmlin/' dataSet{i}{1} sprintf('/conf_sele1_mlp_zmuv1_trn%d/results.mat',dataSet{i}{2}(end))];
         
+    Exp2(i).Result(end+1).name  = 'SVM+logistic1(linear)';
+    Exp2(i).Result(end).fname   = ['results/msvmlin/' dataSet{i}{1} sprintf('/conf_logistic_linear_zmuv1_trn%d/results.mat',dataSet{i}{2}(end))];
+
+    Exp2(i).Result(end+1).name  = 'SVM+logistic1(mlp)';
+    Exp2(i).Result(end).fname   = ['results/msvmlin/' dataSet{i}{1} sprintf('/conf_logistic_mlp_zmuv1_trn%d/results.mat',dataSet{i}{2}(end))];
 end
 
 
 
 %%
-lineStyle = {'k','r','g','b','m'};
+lineStyle = {'k','r','g','b','m','y'};
 k = 0.3;
 shadeColor = { [1 1 1]-k, [1 k k], [k 1 k], [k k 1]};
 for e = 1 : numel( Exp1 )
@@ -100,7 +115,7 @@ for e = 1 : numel( Exp1 )
     end
     ha1=gca;
         
-    %% SVM figure
+    % SVM figure
     hold on;
     
     fprintf('\n[%s]\n', Exp2(e).dataset );
@@ -153,6 +168,9 @@ for e = 1 : numel( Exp1 )
     ha1.Position=[0.1300 0.1800 0.3347 0.75];
     ha2.Position=[0.5703 0.1800 0.3347 0.750];
     print( hf, '-depsc', sprintf('%sLR+SVM_%s.eps', outFolder, Exp1(e).dataset));
+    
+    drawnow;
+    snapnow;
     
 end
 

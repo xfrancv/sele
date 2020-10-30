@@ -37,11 +37,13 @@ for i = 1 : numel( dataSet )
         S{end+1} = run_train_conf_sele_linear( dataSet{i}{1}, 'lr+sele2+zmuv', trnData);    
 %        run_train_conf_sele_quad( dataSet{i}{1}, 'lr+sele1+zmuv', trnData);    
         S{end+1} = run_train_conf_sele_mlp( dataSet{i}{1}, 'lr+sele1+zmuv', trnData);    
+        S{end+1} = run_train_conf_sele_mlp( dataSet{i}{1}, 'lr+sele2+zmuv', trnData);    
 
         S{end+1} = run_train_conf_sele_linear( dataSet{i}{1}, 'msvmlin+sele1+zmuv', trnData);    
         S{end+1} = run_train_conf_sele_linear( dataSet{i}{1}, 'msvmlin+sele2+zmuv', trnData);    
 %        run_train_conf_sele_quad( dataSet{i}{1}, 'msvmlin+sele1+zmuv', trnData);    
         S{end+1} = run_train_conf_sele_mlp( dataSet{i}{1}, 'msvmlin+sele1+zmuv', trnData);    
+        S{end+1} = run_train_conf_sele_mlp( dataSet{i}{1}, 'msvmlin+sele2+zmuv', trnData);    
     end
 end
 
