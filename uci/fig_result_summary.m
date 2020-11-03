@@ -40,11 +40,14 @@ for i = 1 : numel( dataSet )
     Exp1(i).Result(end+1).name = 'LR+sele1(linear)';
     Exp1(i).Result(end).fname  = ['results/lr/' dataSet{i}{1} sprintf('/conf_sele1_linear_zmuv1_trn%d/results.mat',dataSet{i}{2}(end))];
 
-    Exp1(i).Result(end+1).name = 'LR+sele2(linear)';
-    Exp1(i).Result(end).fname  = ['results/lr/' dataSet{i}{1} sprintf('/conf_sele2_linear_zmuv1_trn%d/results.mat',dataSet{i}{2}(end))];
+%     Exp1(i).Result(end+1).name = 'LR+sele2(linear)';
+%     Exp1(i).Result(end).fname  = ['results/lr/' dataSet{i}{1} sprintf('/conf_sele2_linear_zmuv1_trn%d/results.mat',dataSet{i}{2}(end))];
     
     Exp1(i).Result(end+1).name  = 'LR+sele1(mlp)';
     Exp1(i).Result(end).fname   = ['results/lr/' dataSet{i}{1} sprintf('/conf_sele1_mlp_zmuv1_trn%d/results.mat',dataSet{i}{2}(end))];
+
+    Exp1(i).Result(end+1).name  = 'LR+sele2(mlp)';
+    Exp1(i).Result(end).fname   = ['results/lr/' dataSet{i}{1} sprintf('/conf_sele2_mlp_zmuv1_trn%d/results.mat',dataSet{i}{2}(end))];
 
     Exp1(i).Result(end+1).name = 'LR+logistic(linear)';
     Exp1(i).Result(end).fname  = ['results/lr/' dataSet{i}{1} sprintf('/conf_logistic_linear_zmuv1_trn%d/results.mat',dataSet{i}{2}(end))];
@@ -60,11 +63,14 @@ for i = 1 : numel( dataSet )
     Exp2(i).Result(end+1).name  = 'SVM+sele1(linear)';
     Exp2(i).Result(end).fname   = ['results/msvmlin/' dataSet{i}{1} sprintf('/conf_sele1_linear_zmuv1_trn%d/results.mat',dataSet{i}{2}(end))];
 
-    Exp2(i).Result(end+1).name  = 'SVM+sele2(linear)';
-    Exp2(i).Result(end).fname   = ['results/msvmlin/' dataSet{i}{1} sprintf('/conf_sele2_linear_zmuv1_trn%d/results.mat',dataSet{i}{2}(end))];
+%     Exp2(i).Result(end+1).name  = 'SVM+sele2(linear)';
+%     Exp2(i).Result(end).fname   = ['results/msvmlin/' dataSet{i}{1} sprintf('/conf_sele2_linear_zmuv1_trn%d/results.mat',dataSet{i}{2}(end))];
 
     Exp2(i).Result(end+1).name  = 'SVM+sele1(mlp)';
     Exp2(i).Result(end).fname   = ['results/msvmlin/' dataSet{i}{1} sprintf('/conf_sele1_mlp_zmuv1_trn%d/results.mat',dataSet{i}{2}(end))];
+
+    Exp2(i).Result(end+1).name  = 'SVM+sele2(mlp)';
+    Exp2(i).Result(end).fname   = ['results/msvmlin/' dataSet{i}{1} sprintf('/conf_sele2_mlp_zmuv1_trn%d/results.mat',dataSet{i}{2}(end))];
         
     Exp2(i).Result(end+1).name  = 'SVM+logistic1(linear)';
     Exp2(i).Result(end).fname   = ['results/msvmlin/' dataSet{i}{1} sprintf('/conf_logistic_linear_zmuv1_trn%d/results.mat',dataSet{i}{2}(end))];

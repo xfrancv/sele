@@ -2,7 +2,7 @@ function Status = run_train_conf_hinge_mlp( dataSet, setting, trnData )
 
     if nargin < 1
         dataSet = 'avila1';
-        setting = 'lr+hinge2+zmuv'; 
+        setting = 'lr+sele2+zmuv'; 
     end
 
     switch setting

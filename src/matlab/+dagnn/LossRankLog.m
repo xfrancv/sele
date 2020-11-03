@@ -20,16 +20,19 @@ classdef LossRankLog < dagnn.Loss
             proj(i) = predictions( predY(i), i);
         end
         
+ %       R = 0;
+%        nconst = N^2*log(2);
         R = 0;
-        nconst = N^2*log(2);
         for i = 1 : N
             score = proj - proj(i);
-            R        = R + risk(i) * sum( logsumexp( [score(:)' ; zeros(1,N)])) / nconst;
+         %   R        = R + risk(i) * sum( logsumexp( [score(:)' ; zeros(1,N)])) / nconst;
+            
+            R = R + risk(i) * sum( log(1+exp(score) ) );
             
 %             idx   = find( score > 0 );
 %             R     = R + risk(i) * sum(score(idx));
         end        
-        outputs{1} = R ;
+        outputs{1} = R/N ;
       
         % Accumulate loss statistics.
         if obj.ignoreAverage, return; end;
@@ -54,11 +57,10 @@ classdef LossRankLog < dagnn.Loss
         end
         
         alpha = zeros( N, 1);
-        nconst = N^2*log(2);
         for i = 1 : N
             score    = proj - proj(i);
             expScore = exp( score);
-            A        = risk(i)*(expScore./(1+expScore))/nconst;
+            A        = risk(i)*(expScore./(1+expScore));
             alpha    = alpha + A(:);
             alpha(i) = alpha(i) - sum(A);
             
@@ -66,7 +68,7 @@ classdef LossRankLog < dagnn.Loss
 %             alpha(idx) = alpha(idx) + risk(i);
 %             alpha(i)   = alpha(i) - numel(idx)*risk(i);
         end
-%        alpha = alpha / N^2;
+        alpha = alpha / N;
         
         der = zeros( nY, N,'single');
         for i = 1 : N
