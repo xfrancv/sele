@@ -1,12 +1,15 @@
 function Status = run_train_conf_sele_quad( dataSet, setting, trnData )
-
+    rng(0);
+    
     if nargin < 1 
         dataSet = 'avila1';
-        setting = 'lr+hinge1+zmuv';
+        setting = 'lr+sele2+zmuv';
     end
     
-    switch setting
-        case 'lr+hinge1+zmuv';
+    [benchmark,riskType,zmuvNorm] = parse_sele_opt(setting);
+    
+    switch benchmark
+        case 'lr';
 
             Data        = load( ['../data/' dataSet '.mat'], 'X','Y','Split' );
             rootFolder  = ['results/lr/' dataSet '/'];
@@ -22,10 +25,8 @@ function Status = run_train_conf_sele_quad( dataSet, setting, trnData )
             
             Opt.verb    = 1;   
             Opt.tolRel  = 0.01;
-            riskType    = 1;
-            zmuvNorm    = 1;
 
-        case 'msvmlin+hinge1+zmuv';
+        case 'msvmlin';
 
             Data        = load( ['../data/' dataSet '.mat'], 'X','Y','Split' );
             rootFolder  = ['results/msvmlin/' dataSet '/'];
@@ -40,8 +41,6 @@ function Status = run_train_conf_sele_quad( dataSet, setting, trnData )
 
             Opt.verb    = 1;   
             Opt.tolRel  = 0.01;
-            riskType    = 1;
-            zmuvNorm    = 1;
     end
 
     %%
@@ -119,15 +118,19 @@ function Status = run_train_conf_sele_quad( dataSet, setting, trnData )
                         case 1
                             [W, Stat] = bmrm( RrData, @risk_rrank_par, lambda, Opt );
                         case 2
-                            [W, Stat] = bmrm( RrData, @risk_rrank2, lambda, Opt );
+                            [W, Stat] = bmrm( RrData, @risk_rrank_log_par, lambda, Opt );
+                        case 3
+                            [W, Stat] = bmrm( RrData, @risk_rrank2_par, lambda, Opt );
                     end
                 else
                     boxConstr = ones( size(RrData.X,1),1)*1000;
                     switch riskType
                         case 1
-                            [W, Stat] = accpm( RrData, @risk_rrank,[],[],boxConstr, lambda, Opt);
+                            [W, Stat] = accpm( RrData, @risk_rrank_par,[],[],boxConstr, lambda, Opt);
                         case 2
-                            [W, Stat] = accpm( RrData, @risk_rrank2,[],[],boxConstr, lambda, Opt);
+                            [W, Stat] = accpm( RrData, @risk_rrank_log_par,[],[],boxConstr, lambda, Opt);
+                        case 3
+                            [W, Stat] = accpm( RrData, @risk_rrank2_par,[],[],boxConstr, lambda, Opt);
                     end
                 end
 

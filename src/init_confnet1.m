@@ -46,11 +46,11 @@ function Net = init_confnet1(nInputs, nOutputs, nHiddenStates, varargin )
     
     %% Loss functions
     switch opts.loss
-        case 1
+        case 1 % sele1 - hinge-loss
             Net.addLayer('rankloss', dagnn.LossRank(), {'prediction','risk','predY'}, 'objective' );
-        case 2
+        case 2 % sele2 - logistic function
             Net.addLayer('rankloss', dagnn.LossRankLog(), {'prediction','risk','predY'}, 'objective' );
-        case 3
+        case 3 % sele3 - hing-loss - no quadratic comparison
             Net.addLayer('rankloss', dagnn.LossSele(), {'prediction','risk','predY'}, 'objective' );
     end
     

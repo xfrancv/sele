@@ -17,9 +17,9 @@ function [R,subgrad] = risk_rrank_par( Data, W )
 
     for p = 1:numel(Data)
         if nargin < 2
-            [rsk, sg] = risk_rrank2(Data{p});
+            [rsk, sg] = risk_rrank_log(Data{p});
         else
-            [rsk, sg] = risk_rrank2(Data{p}, W);
+            [rsk, sg] = risk_rrank_log(Data{p}, W);
         end
         if p == 1
             R       = rsk;
@@ -28,6 +28,9 @@ function [R,subgrad] = risk_rrank_par( Data, W )
             R       = R + rsk;
             subgrad = subgrad + sg;
         end
+%         if isnan(R)
+%             keyboard;
+%         end
     end;
     
     R = R / numel( Data);

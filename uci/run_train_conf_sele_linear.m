@@ -5,7 +5,7 @@ function Status = run_train_conf_sele_linear( dataSet, setting, trnData )
 
     if nargin < 1
         dataSet = 'avila1';
-        setting = 'msvmlin+sele1+zmuv';
+        setting = 'lr+sele3+zmuv';
     end
     
     [benchmark,riskType,zmuvNorm] = parse_sele_opt(setting);
@@ -122,15 +122,19 @@ function Status = run_train_conf_sele_linear( dataSet, setting, trnData )
                         case 1
                             [W, Stat] = bmrm( RrData, @risk_rrank_par, lambda, Opt );                                
                         case 2
+                            [W, Stat] = bmrm( RrData, @risk_rrank_log_par, lambda, Opt );
+                        case 3
                             [W, Stat] = bmrm( RrData, @risk_rrank2_par, lambda, Opt );
                     end
                 else
                     boxConstr = ones( size(RrData.X,1),1)*1000;
                     switch riskType
                         case 1
-                            [W, Stat] = accpm( RrData, @risk_rrank,[],[],boxConstr, lambda, Opt);
+                            [W, Stat] = accpm( RrData, @risk_rrank_par,[],[],boxConstr, lambda, Opt);
                         case 2
-                            [W, Stat] = accpm( RrData, @risk_rrank2,[],[],boxConstr, lambda, Opt);
+                            [W, Stat] = accpm( RrData, @risk_rrank_log_par,[],[],boxConstr, lambda, Opt);
+                        case 3
+                            [W, Stat] = accpm( RrData, @risk_rrank2_par,[],[],boxConstr, lambda, Opt);
                     end
                 end
 
@@ -291,13 +295,13 @@ function Status = run_train_conf_sele_linear( dataSet, setting, trnData )
     save( outFile, 'tstRiskCurve', 'tstAuc', 'valLoss', 'tstLoss' );
 
     %%
-%     figure;
-%     plot(  [1:nTst]/nTst, tstRiskCurve );
-%     hold on;
-%     plot( [1:nTst]/nTst, mean( tstRiskCurve, 2), 'r', 'linewidth', 2);
-%     xlabel('cover');
-%     ylabel('err');
-%     grid on;
+    figure;
+    plot(  [1:nTst]/nTst, tstRiskCurve );
+    hold on;
+    plot( [1:nTst]/nTst, mean( tstRiskCurve, 2), 'r', 'linewidth', 2);
+    xlabel('cover');
+    ylabel('err');
+    grid on;
 
     return;
 end
