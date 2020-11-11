@@ -1,5 +1,9 @@
 %%
-% It generates EPS figures from paper to figs/ folder.
+
+showLinear = 0;
+showQuad = 1;
+showMlp = 0;
+showSele2 = 0;
 
 outFolder = 'figs/';
 
@@ -32,10 +36,6 @@ if ~exist(outFolder ), mkdir( outFolder ); end
 Exp1  = [];
 Exp2 = [];
 
-showLinear = 0;
-showQuad = 1;
-showMlp = 0;
-showSele2 = 0;
 
 for i = 1 : numel( dataSet )
     Exp1(i).dataset = dataSet{i}{1};
