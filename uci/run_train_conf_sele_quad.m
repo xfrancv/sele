@@ -1,4 +1,4 @@
-function run_train_conf_sele_quad( dataSet, setting, trnData )
+function Status = run_train_conf_sele_quad( dataSet, setting, trnData )
 
     if nargin < 1 
         dataSet = 'avila1';
@@ -176,9 +176,14 @@ function run_train_conf_sele_quad( dataSet, setting, trnData )
     end
     fprintf('#done=%d\n', numDone);
     fprintf('#missing=%d\n', numMissing );
+    Status = [];
     if numMissing
+        if nargin <= 3, trnData = nan; end
+        Status = sprintf('logistic_linear: dataset: %s, setting: %s, trnData: %d, #done=%d, #missing=%d',...
+                      dataSet, setting, trnData, numDone, numMissing );
         return;
     end    
+    
     
     
     %% Collect results
