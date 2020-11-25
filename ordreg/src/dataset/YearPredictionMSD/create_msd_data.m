@@ -1,9 +1,17 @@
 rng(0);
 
-outFile  = '../../../data/msd1.mat';
-portions = [0.3 0.3 0.1 0.1 0.2]; % trn1 trn2 val1 val2 tst
-nSplits  = 5;
-nY = 10;
+switch 2
+    case 1
+        outFile  = '../../../data/msd1.mat';
+        portions = [0.3 0.3 0.1 0.1 0.2]; % trn1 trn2 val1 val2 tst
+        nSplits  = 5;
+        skipLabels = 1;
+    case 2
+        outFile  = '../../../data/msd2.mat';
+        portions = [0.3 0.3 0.1 0.1 0.2]; % trn1 trn2 val1 val2 tst
+        nSplits  = 5;
+        skipLabels = 0;
+end
 
 %%
 % if ~exist( outFile )
@@ -19,9 +27,11 @@ Y = A(:,1);
 
 
 %% 
-idx = find( Y >= 1970 & Y <=2010);
-X = X(:,idx);
-Y = Y(idx);
+if skipLabels
+    idx = find( Y >= 1970 & Y <=2010);
+    X = X(:,idx);
+    Y = Y(idx);
+end
 
 [~,~,Y] = unique( Y );
 nY = max(Y);

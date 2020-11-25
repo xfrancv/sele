@@ -1,5 +1,9 @@
 %
 
+showLinear = 1;
+showQuad = 1;
+showMlp = 0;
+
 outFolder = 'figs/';
 
 dataSet = {{'california1', [100 500 1000 5000 6190] },...
@@ -14,8 +18,14 @@ dataSet = {{'california1', [100 500 1000 5000 6190] },...
            {'superconduct1',[100 500 1000 5000 6378]}};
 
 
+% methodSuffix = [];
+% 
+% if showLinear, methodSuffix{end+1} = '_linear_zmuv1'; end
+% if showQuad, methodSuffix{end+1} = '_quad_zmuv1'; end
+% if showMlp, methodSuffix{end+1} = '_mlp_zmuv1'; end
+       
 %methodSuffix = {'_linear_zmuv1','_quad_zmuv1','_mlp_zmuv1'};
-methodSuffix = {'_linear_zmuv1','_mlp_zmuv1'};
+%methodSuffix = {'_linear_zmuv1','_mlp_zmuv1'};
 
 %
 if ~exist(outFolder ), mkdir( outFolder ); end
@@ -35,18 +45,31 @@ for e = 1 : numel( dataSet )
 
 
     Exp.dataset = dataSet{e}{1};
-    Exp.Result(1).name = sprintf('reg(lin)');
-    Exp.Result(1).fnamePrefix  = sprintf('results/svorimc/%s/conf_regression_linear_zmuv1', dataSet{e}{1});
-    Exp.Result(1).trnData = dataSet{e}{2};
-    Exp.Result(2).name = sprintf('sele1(lin)');
-    Exp.Result(2).fnamePrefix  = sprintf('results/svorimc/%s/conf_sele1_linear_zmuv1',dataSet{e}{1} );
-    Exp.Result(2).trnData = dataSet{e}{2};    
-    Exp.Result(3).name = sprintf('reg(mlp)');
-    Exp.Result(3).fnamePrefix  = sprintf('results/svorimc/%s/conf_regression_mlp_zmuv1', dataSet{e}{1});
-    Exp.Result(3).trnData = dataSet{e}{2};
-    Exp.Result(4).name = sprintf('sele1(mlp)');
-    Exp.Result(4).fnamePrefix  = sprintf('results/svorimc/%s/conf_sele1_mlp_zmuv1', dataSet{e}{1});
-    Exp.Result(4).trnData = dataSet{e}{2};
+    Exp.Result = [];
+    if showLinear
+        Exp.Result(end+1).name = 'reg(lin)';
+        Exp.Result(end).fnamePrefix  = sprintf('results/svorimc/%s/conf_regression_linear_zmuv1', dataSet{e}{1});
+        Exp.Result(end).trnData = dataSet{e}{2};
+        Exp.Result(end+1).name = 'sele1(lin)';
+        Exp.Result(end).fnamePrefix  = sprintf('results/svorimc/%s/conf_sele1_linear_zmuv1',dataSet{e}{1} );
+        Exp.Result(end).trnData = dataSet{e}{2};    
+    end
+    if showQuad
+        Exp.Result(end+1).name = 'reg(quad)';
+        Exp.Result(end).fnamePrefix  = sprintf('results/svorimc/%s/conf_regression_quad_zmuv1', dataSet{e}{1});
+        Exp.Result(end).trnData = dataSet{e}{2};
+        Exp.Result(end+1).name = 'sele1(quad)';
+        Exp.Result(end).fnamePrefix  = sprintf('results/svorimc/%s/conf_sele1_quad_zmuv1',dataSet{e}{1} );
+        Exp.Result(end).trnData = dataSet{e}{2};    
+    end
+    if showMlp
+        Exp.Result(end+1).name = 'reg(mlp)';
+        Exp.Result(end).fnamePrefix  = sprintf('results/svorimc/%s/conf_regression_mlp_zmuv1', dataSet{e}{1});
+        Exp.Result(end).trnData = dataSet{e}{2};
+        Exp.Result(end+1).name = 'sele1(mlp)';
+        Exp.Result(end).fnamePrefix  = sprintf('results/svorimc/%s/conf_sele1_mlp_zmuv1', dataSet{e}{1});
+        Exp.Result(end).trnData = dataSet{e}{2};
+    end
 
 
     %
@@ -59,8 +82,12 @@ for e = 1 : numel( dataSet )
         tstAuc = [];
         for d= Exp.Result(i).trnData
             fname = sprintf('%s_trn%d/results.mat', Exp.Result(i).fnamePrefix, d);
-            R = load( fname, 'tstAuc' );
-            tstAuc = [tstAuc mean(R.tstAuc)];
+            if exist( fname)
+                R = load( fname, 'tstAuc' );
+                tstAuc = [tstAuc mean(R.tstAuc)];
+            else
+                tstAuc = [tstAuc nan];
+            end
         end
 
         str1{end+1} = Exp.Result(i).name;

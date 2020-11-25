@@ -1,37 +1,40 @@
+%%
 rng(0);
 
-switch 2
+switch 1
     case 1
-        outFile  = '../../../data/bank1.mat';
+        outFile  = '../../../data/metro1.mat';
         portions = [0.3 0.3 0.1 0.1 0.2]; % trn1 trn2 val1 val2 tst
         nSplits  = 5;
         nY = 10;
     case 2
-        outFile  = '../../../data/bank2.mat';
+        outFile  = '../../../data/metro2.mat';
         portions = [0.3 0.3 0.1 0.1 0.2]; % trn1 trn2 val1 val2 tst
         nSplits  = 5;
         nY = 100;
 end
 
 %%
-% if ~exist( outFile )
-%     system('wget --no-check-certificate https://www.dcc.fc.up.pt/~ltorgo/Regression/bank32NH.tgz');
-%     system('tar -xvzf bank32NH.tgz');  
-% end
+[holiday,temp,rain_1h,snow_1h,clouds_all,weather_main,weather_descr,date_time, traffic_volume] = ...
+    textread('Metro_Interstate_Traffic_Volume.csv', ...
+    '%s%f%f%f%f%s%s%s%f','delimiter',',','headerlines',1);
 
 
-%%
-A = dlmread( 'Bank32nh/bank32nh.data',' ');
-A = A(:,1:33);
+%
+day=arrayfun(@(x) x{1}(6:10), date_time, 'UniformOutput', false);
+hour=arrayfun(@(x) x{1}(12:13), date_time, 'UniformOutput', false);
 
-B = dlmread( 'Bank32nh/bank32nh.test',' ');
-B = B(:,1:33);
-
-
-X = [A(:,1:32) ; B(:,1:32)]';
-Y = [A(:,33); B(:,33)];
-
-
+X = [get_one_hot_features( holiday ) ; ...
+     temp(:)' ; ...
+     rain_1h(:)'; ...
+     snow_1h(:)'; ...
+     clouds_all(:)'; ...
+     get_one_hot_features( weather_main ); ...
+     get_one_hot_features( weather_descr ); ...
+     get_one_hot_features( day ); ...
+     get_one_hot_features( hour )];
+ 
+Y = traffic_volume;
 
 %%
 % target value, Y, is discretized into nY ordinal quantities using
@@ -51,7 +54,7 @@ for i = 1 : nY
     newY(idx) = i;
 end
 
-Y = newY;
+Y = newY; 
 
 %%
 Split = [];
@@ -61,19 +64,19 @@ for s = 1 : nSplits
     for i = 1 : numel( field )
         Split(s).(field{i}) = [];
     end
-    
+
     for y = 1 : nY
         idx = find( Y(:)' == y );
         N   = numel( idx );
         idx = idx( randperm( N ) );
-        
+
         th = [0 round( cumsum( portions )*N)];
-        
+
         for i = 1 : numel( field )
             Split(s).(field{i}) = [Split(s).(field{i}) idx(th(i)+1:th(i+1))];
         end
     end
-    
+
     for i = 1 : numel( field )
         idx = Split(s).(field{i});
         Split(s).(field{i}) = idx( randperm( numel(idx)));
@@ -97,8 +100,10 @@ for s = 1 : nSplits
         numel(Split(s).trn2), numel(Split(s).val1), numel(Split(s).val2),...
         numel(Split(s).tst));
 end
-
+    
 %%
 Y = Y(:)';
 save( outFile, 'X', 'Y', 'Split', '-v7.3'  );
 % EOF
+
+

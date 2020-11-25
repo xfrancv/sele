@@ -1,9 +1,18 @@
 rng(0);
 
-outFile  = '../../../data/california1.mat';
-portions = [0.3 0.3 0.1 0.1 0.2]; % trn1 trn2 val1 val2 tst
-nSplits  = 5;
-nY = 10;
+switch 2
+    case 1
+        outFile  = '../../../data/california1.mat';
+        portions = [0.3 0.3 0.1 0.1 0.2]; % trn1 trn2 val1 val2 tst
+        nSplits  = 5;
+        nY = 10;
+    case 2
+        outFile  = '../../../data/california2.mat';
+        portions = [0.3 0.3 0.1 0.1 0.2]; % trn1 trn2 val1 val2 tst
+        nSplits  = 5;
+        nY = 100;
+        
+end
 
 %%
 % if ~exist( outFile )

@@ -1,9 +1,10 @@
 %%
 
-showLinear = 0;
-showQuad = 1;
+showLinear = 1;
+showQuad = 0;
 showMlp = 0;
-showSele2 = 0;
+showSele2 = 1;
+showSele3 = 1;
 
 outFolder = 'figs/';
 
@@ -50,6 +51,10 @@ for i = 1 : numel( dataSet )
             Exp1(i).Result(end+1).name = 'LR+sele2(linear)';
             Exp1(i).Result(end).fname  = ['results/lr/' dataSet{i}{1} sprintf('/conf_sele2_linear_zmuv1_trn%d/results.mat',dataSet{i}{2}(end))];
         end
+        if showSele3
+            Exp1(i).Result(end+1).name = 'LR+sele3(linear)';
+            Exp1(i).Result(end).fname  = ['results/lr/' dataSet{i}{1} sprintf('/conf_sele3_linear_zmuv1_trn%d/results.mat',dataSet{i}{2}(end))];
+        end
 
         Exp1(i).Result(end+1).name = 'LR+logistic(linear)';
         Exp1(i).Result(end).fname  = ['results/lr/' dataSet{i}{1} sprintf('/conf_logistic_linear_zmuv1_trn%d/results.mat',dataSet{i}{2}(end))];
@@ -86,6 +91,10 @@ for i = 1 : numel( dataSet )
         if showSele2
             Exp2(i).Result(end+1).name  = 'SVM+sele2(linear)';
             Exp2(i).Result(end).fname   = ['results/msvmlin/' dataSet{i}{1} sprintf('/conf_sele2_linear_zmuv1_trn%d/results.mat',dataSet{i}{2}(end))];
+        end
+        if showSele3
+            Exp2(i).Result(end+1).name  = 'SVM+sele3(linear)';
+            Exp2(i).Result(end).fname   = ['results/msvmlin/' dataSet{i}{1} sprintf('/conf_sele3_linear_zmuv1_trn%d/results.mat',dataSet{i}{2}(end))];
         end
         Exp2(i).Result(end+1).name  = 'SVM+logistic1(linear)';
         Exp2(i).Result(end).fname   = ['results/msvmlin/' dataSet{i}{1} sprintf('/conf_logistic_linear_zmuv1_trn%d/results.mat',dataSet{i}{2}(end))];

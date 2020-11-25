@@ -1,5 +1,9 @@
 %%
 
+showLinear = 1;
+showQuad = 1;
+showMlp = 0;
+
 dataSet = {{'california1', [100 500 1000 5000 6190] },...
            {'abalone1', [100 500 1000 1252] },...
            {'bank1',[100 500 1000 2000 2457]},...
@@ -26,41 +30,57 @@ legendLoc = {
  
 
 COVER = 0.5;
-% draw table
+Result = [];
 for d = 1 : numel( dataSet )
     
-    Result  = [];
+
+    n = numel( dataSet{d}{2});
+    nTrn = dataSet{d}{2}(n);
+    dataset = dataSet{d}{1};
+
+    Result{d}  = [];
+    
+    if showLinear
+        Result{d}(end+1).name  = sprintf('sele(linear)');
+        Result{d}(end).fname = sprintf('results/svorimc/%s/conf_sele1_linear_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
+
+        Result{d}(end+1).name  = sprintf('reg(linear)') ;
+        Result{d}(end).fname   = sprintf('results/svorimc/%s/conf_regression_linear_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
+    end
+    
+    if showMlp
+        Result{d}(end+1).name = sprintf('sele(mlp)');
+        Result{d}(end).fname  = sprintf('results/svorimc/%s/conf_sele1_mlp_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
+
+        Result{d}(end+1).name  = sprintf('reg(mlp)');
+        Result{d}(end).fname   = sprintf('results/svorimc/%s/conf_regression_mlp_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
+    end
+
+    if showQuad
+        Result{d}(end+1).name = sprintf('sele(quad)');
+        Result{d}(end).fname  = sprintf('results/svorimc/%s/conf_sele1_quad_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
+
+        Result{d}(end+1).name = sprintf('reg(quad)');
+        Result{d}(end).fname  = sprintf('results/svorimc/%s/conf_regression_quad_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
+    end
+end
+
+
+%% Table 
+for d = 1 : numel( dataSet )
 
     n = numel( dataSet{d}{2});
     nTrn = dataSet{d}{2}(n);
     dataset = dataSet{d}{1};
     
-    Result(1).name  = sprintf('sele(linear)');
-    Result(1).fname = sprintf('results/svorimc/%s/conf_sele1_linear_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
-
-    Result(end+1).name  = sprintf('reg(linear)') ;
-    Result(end).fname   = sprintf('results/svorimc/%s/conf_regression_linear_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
-
-    Result(end+1).name = sprintf('sele(mlp)');
-    Result(end).fname  = sprintf('results/svorimc/%s/conf_sele1_mlp_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
-
-    Result(end+1).name  = sprintf('reg(mlp)');
-    Result(end).fname   = sprintf('results/svorimc/%s/conf_regression_mlp_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
-
-%     Result(end+1).name = sprintf('sele(quad)');
-%     Result(end).fname  = sprintf('results/svorimc/%s/conf_sele1_quad_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
-% 
-%     Result(end+1).name = sprintf('reg(quad)');
-%     Result(end).fname  = sprintf('results/svorimc/%s/conf_regression1_quad_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
-
     if d == 1
         fprintf('               ');
-        for i = 1 : numel( Result) 
-            fprintf('| %28s   ', Result(i).name );
+        for i = 1 : numel( Result{d}) 
+            fprintf('| %28s   ', Result{d}(i).name );
         end
         fprintf('|\n  ');
         fprintf('             ');
-        for i = 1 : numel( Result) 
+        for i = 1 : numel( Result{d} ) 
             fprintf('| AuRC            R@%2d           ', round(100*COVER) );
         end
         fprintf('| R@100\n');
@@ -72,9 +92,9 @@ for d = 1 : numel( dataSet )
     R = [];
     aurc = [];
     rat = [];
-    for i = 1 : numel( Result) 
-        if exist( Result(i).fname)
-            R{i} = load( Result(i).fname, 'tstRiskCurve', 'tstAuc' );
+    for i = 1 : numel( Result{d}) 
+        if exist( Result{d}(i).fname)
+            R{i} = load( Result{d}(i).fname, 'tstRiskCurve', 'tstAuc' );
             nTst = size( R{i}.tstRiskCurve,1);        
             th = round( COVER*nTst);
             aurc(i) = mean(R{i}.tstAuc);
@@ -85,7 +105,7 @@ for d = 1 : numel( dataSet )
         end
     end
         
-    for i = 1 : numel( Result) 
+    for i = 1 : numel( Result{d} ) 
         
         l1=' ';
         r1= ' ';
@@ -122,38 +142,21 @@ end
 % plot all figures
 for d = 1 : numel( dataSet )
     
+    n = numel( dataSet{d}{2});
+    nTrn = dataSet{d}{2}(n);
+    dataset = dataSet{d}{1};
+    
     for n = numel( dataSet{d}{2})
         
         hf=figure;
         hold on;
-        Result  = [];
         
         dataset = dataSet{d}{1};
-        Result(1).name  = sprintf('sele(linear),n=%d', dataSet{d}{2}(n));
-        Result(1).fname = sprintf('results/svorimc/%s/conf_sele1_linear_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
-
-        Result(end+1).name  = sprintf('reg(linear),n=%d',dataSet{d}{2}(n)) ;
-        Result(end).fname   = sprintf('results/svorimc/%s/conf_regression_linear_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
-
-        Result(end+1).name = sprintf('sele(mlp),n=%d', dataSet{d}{2}(n));
-        Result(end).fname  = sprintf('results/svorimc/%s/conf_sele1_mlp_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
-        
-        Result(end+1).name  = sprintf('reg(mlp),n=%d', dataSet{d}{2}(n));
-        Result(end).fname   = sprintf('results/svorimc/%s/conf_regression_mlp_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
-
-%         Result(end+1).name = sprintf('sele(quad)');
-%         Result(end).fname  = sprintf('results/svorimc/%s/conf_sele1_quad_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
-% 
-%         Result(end+1).name = sprintf('reg(quad)');
-%         Result(end).fname  = sprintf('results/svorimc/%s/conf_regression1_quad_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
-        
 
         %
         lineStyle = {'r','k','g','b','m','c'};
 
-
         fprintf('\n[%s]\n', dataSet{d}{1} );
-
 
         fprintf('                                 tst AUC         R@90            R@100\n');
         h1 = [];
@@ -161,17 +164,17 @@ for d = 1 : numel( dataSet )
         maxR100=-inf;
         minR50 = inf;
         tstAuc = [];
-        for i = 1 : numel( Result )
-            if exist( Result(i).fname)
-                R = load( Result(i).fname, 'tstRiskCurve', 'tstAuc' );
+        for i = 1 : numel( Result{d} )
+            if exist( Result{d}(i).fname)
+                R = load( Result{d}(i).fname, 'tstRiskCurve', 'tstAuc' );
 
                 nTst = size( R.tstRiskCurve,1);
                 h1(end+1) = plot( [1:nTst]/nTst, mean( R.tstRiskCurve, 2), lineStyle{i}, 'linewidth', 2);
                 hold on;
-                str1{end+1} = Result(i).name ;
+                str1{end+1} = Result{d}(i).name ;
 
                 th = round( COVER*nTst);
-                fprintf('%30s   %.4f(%.4f)  %.4f(%.4f)  %.4f(%.4f)\n', Result(i).name, ...
+                fprintf('%30s   %.4f(%.4f)  %.4f(%.4f)  %.4f(%.4f)\n', Result{d}(i).name, ...
                     mean(R.tstAuc), std(R.tstAuc), ...
                     mean( R.tstRiskCurve(th,:)),std( R.tstRiskCurve(th,:)),...
                     mean( R.tstRiskCurve(end,:)),std( R.tstRiskCurve(end,:))); 

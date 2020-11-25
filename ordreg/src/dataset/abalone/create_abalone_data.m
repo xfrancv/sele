@@ -1,8 +1,17 @@
 rng(0);
 
-outFile  = '../../../data/abalone1.mat';
-portions = [0.3 0.3 0.1 0.1 0.2]; % trn1 trn2 val1 val2 tst
-nSplits  = 5;
+switch 2
+    case 1
+        outFile  = '../../../data/abalone1.mat';
+        portions = [0.3 0.3 0.1 0.1 0.2]; % trn1 trn2 val1 val2 tst
+        nSplits  = 5;
+        mergeLabels = 1;
+    case 2
+        outFile  = '../../../data/abalone2.mat';
+        portions = [0.3 0.3 0.1 0.1 0.2]; % trn1 trn2 val1 val2 tst
+        nSplits  = 5;
+        mergeLabels = 0;
+end
 
 %%
 % if ~exist( outFile )
@@ -27,19 +36,21 @@ x30( find( x1=='M')) = 1;
 
 X = [x10 x20 x30 x2 x3 x4 x5 x6 x7 x8]';
 
-%%
-% merge labels 1-3   and 21-29
-Y = y(:);
-for k = [1:2]
-    Y(find(y==k)) = 3;
+if mergeLabels
+    %%
+    % merge labels 1-3   and 21-29
+    Y = y(:);
+    for k = [1:2]
+        Y(find(y==k)) = 3;
+    end
+    for k = [22:29]
+        Y(find(y==k)) = 21;
+    end
+    [~,~,y] = unique(Y);
+    
 end
-for k = [22:29]
-    Y(find(y==k)) = 21;
-end
-[~,~,y] = unique(Y);
 
 Y = y;
-
 
 nY = max(y);
 
