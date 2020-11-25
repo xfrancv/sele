@@ -5,13 +5,13 @@ function run_train_conf_sele_linear( dataSet, setting, trnData )
 
     if nargin < 1
         dataSet = 'abalone1';
-        setting = 'hinge1+zmuv';
+        setting = 'sele2+zmuv';
         
     end
     
     switch setting
         
-        case 'hinge1+zmuv';
+        case 'sele1+zmuv';
 
             Data        = load( ['data/' dataSet '.mat'], 'X','Y','Split' );
             rootFolder  = ['results/svorimc/' dataSet '/'];
@@ -27,6 +27,25 @@ function run_train_conf_sele_linear( dataSet, setting, trnData )
             Opt.verb    = 1;   
             Opt.tolRel  = 0.01;
             riskType    = 1;
+            zmuvNorm    = 1;
+            
+        case 'sele2+zmuv';
+
+            Data        = load( ['data/' dataSet '.mat'], 'X','Y','Split' );
+            rootFolder  = ['results/svorimc/' dataSet '/'];
+
+            Params = [];
+            for lambda = [1 10 100 1000 ]
+                for batchSize = [50 100 500 1000]
+                    Params(end+1).lambda = lambda;
+                    Params(end).batchSize = batchSize;
+                end
+            end
+            
+            Opt.verb    = 1;   
+            Opt.eps = 1e-5;
+            Opt.maxIter = 1000;
+            riskType    = 2;
             zmuvNorm    = 1;
 
     end
@@ -99,7 +118,7 @@ function run_train_conf_sele_linear( dataSet, setting, trnData )
                 idx    = randperm(nTrn);
                 from   = 1;
                 nBatches = max(1,round(nTrn/batchSize));
-                %% serious BUG !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                %%
                 for k = 1 : nBatches
                     to        = round( k*nTrn/nBatches );
                     RrData{k} = risk_rrank_init(trnX(:,idx(from:to)), trnPredY(idx(from:to)), trnPredLoss(idx(from:to)), nY);
@@ -112,7 +131,13 @@ function run_train_conf_sele_linear( dataSet, setting, trnData )
                         case 1
                             [W, Stat] = bmrm( RrData, @risk_rrank_par, lambda, Opt );
                         case 2
-                            [W, Stat] = bmrm( RrData, @risk_rrank2, lambda, Opt );
+%                            [W, Stat] = bmrm( RrData, @risk_rrank_log_par, lambda, Opt );
+                            [~,W0] = risk_rrank_log_par( RrData );
+                            S.Data = RrData;
+                            S.lambda = lambda;
+                            [W, Stat] = lbfgs( S, 'risk_rrank_log_par_lambda', W0*0, Opt );
+                        case 3
+                            [W, Stat] = bmrm( RrData, @risk_rrank2_par, lambda, Opt );
                     end
                 else
                     boxConstr = ones( size(RrData.X,1),1)*1000;
@@ -120,7 +145,13 @@ function run_train_conf_sele_linear( dataSet, setting, trnData )
                         case 1
                             [W, Stat] = accpm( RrData, @risk_rrank,[],[],boxConstr, lambda, Opt);
                         case 2
-                            [W, Stat] = accpm( RrData, @risk_rrank2,[],[],boxConstr, lambda, Opt);
+                            [~,W0] = risk_rrank_log_par( RrData );
+                            S.Data = RrData;
+                            S.lambda = lambda;
+                            [W, Stat] = lbfgs( S, 'risk_rrank_log_par_lambda', W0*0, Opt );
+%                            [W, Stat] = accpm( RrData, @risk_rrank_log_par,[],[],boxConstr, lambda, Opt);
+                        case 3
+                            [W, Stat] = accpm( RrData, @risk_rrank2_par,[],[],boxConstr, lambda, Opt);
                     end
                 end
 

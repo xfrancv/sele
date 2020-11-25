@@ -15,11 +15,11 @@ function [R,subgrad] = risk_rrank_par( Data, W )
 %
     
 
-    for p = 1:numel(Data)
+    for p = 1:numel(Data.Data)
         if nargin < 2
-            [rsk, sg] = risk_rrank_log(Data{p});
+            [rsk, sg] = risk_rrank_log(Data.Data{p});
         else
-            [rsk, sg] = risk_rrank_log(Data{p}, W);
+            [rsk, sg] = risk_rrank_log(Data.Data{p}, W);
         end
         if p == 1
             R       = rsk;
@@ -33,8 +33,11 @@ function [R,subgrad] = risk_rrank_par( Data, W )
 %         end
     end;
     
-    R = R / numel( Data);
-    subgrad = subgrad / numel( Data);
+    R = R / numel( Data.Data);
+    subgrad = subgrad / numel( Data.Data );
+    
+    R = R + 0.5*Data.lambda*norm( W)^2;
+    subgrad = subgrad + Data.lambda*W(:);
     
     
 end

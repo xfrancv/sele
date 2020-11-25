@@ -5,12 +5,12 @@ function run_train_conf_sele_quad( dataSet, setting, trnData )
 
     if nargin < 1
         dataSet = 'abalone1';
-        setting = 'hinge1+zmuv';
+        setting = 'sele2+zmuv';
     end
     
     switch setting
         
-        case 'hinge1+zmuv';
+        case 'sele1+zmuv';
 
             Data        = load( ['data/' dataSet '.mat'], 'X','Y','Split' );
             rootFolder  = ['results/svorimc/' dataSet '/'];
@@ -27,6 +27,43 @@ function run_train_conf_sele_quad( dataSet, setting, trnData )
             Opt.verb    = 1;   
             Opt.tolRel  = 0.01;
             riskType    = 1;
+            zmuvNorm    = 1;
+        case 'sele2+zmuv';
+
+            Data        = load( ['data/' dataSet '.mat'], 'X','Y','Split' );
+            rootFolder  = ['results/svorimc/' dataSet '/'];
+
+            Params = [];
+            for lambda = [1 10 100 1000]
+                for batchSize = [50 100 500 1000]
+                    Params(end+1).lambda = lambda;
+                    Params(end).batchSize = batchSize;
+                end
+            end
+        
+            Opt.verb    = 1;   
+            Opt.eps = 1e-5;
+            Opt.maxIter = 1000;
+            riskType    = 2;
+            zmuvNorm    = 1;
+            
+        case 'sele3+zmuv';
+
+            Data        = load( ['data/' dataSet '.mat'], 'X','Y','Split' );
+            rootFolder  = ['results/svorimc/' dataSet '/'];
+
+            Params = [];
+            for lambda = [1 10 100 1000]
+                for batchSize = [50 100 500 1000]
+                    Params(end+1).lambda = lambda;
+                    Params(end).batchSize = batchSize;
+                end
+            end
+        
+
+            Opt.verb    = 1;   
+            Opt.tolRel  = 0.01;
+            riskType    = 3;
             zmuvNorm    = 1;
 
     end
@@ -109,17 +146,29 @@ function run_train_conf_sele_quad( dataSet, setting, trnData )
                     switch riskType
                         case 1
                             [W, Stat] = bmrm( RrData, @risk_rrank_par, lambda, Opt );
-                                
                         case 2
-                            [W, Stat] = bmrm( RrData, @risk_rrank2, lambda, Opt );
+%                            [W, Stat] = bmrm( RrData, @risk_rrank_log_par, lambda, Opt );
+                            [~,W0] = risk_rrank_log_par( RrData );
+                            S.Data = RrData;
+                            S.lambda = lambda;
+                            [W, Stat] = lbfgs( S, 'risk_rrank_log_par_lambda', W0*0, Opt );
+                            
+                        case 3
+                            [W, Stat] = bmrm( RrData, @risk_rrank2_par, lambda, Opt );
                     end
                 else
                     boxConstr = ones( size(RrData.X,1),1)*1000;
                     switch riskType
                         case 1
-                            [W, Stat] = accpm( RrData, @risk_rrank,[],[],boxConstr, lambda, Opt);
+                            [W, Stat] = accpm( RrData, @risk_rrank_par,[],[],boxConstr, lambda, Opt);
                         case 2
-                            [W, Stat] = accpm( RrData, @risk_rrank2,[],[],boxConstr, lambda, Opt);
+%                            [W, Stat] = bmrm( RrData, @risk_rrank_log_par, lambda, Opt );
+                            [~,W0] = risk_rrank_log_par( RrData );
+                            S.Data = RrData;
+                            S.lambda = lambda;
+                            [W, Stat] = lbfgs( S, 'risk_rrank_log_par_lambda', W0*0, Opt );
+                        case 3
+                            [W, Stat] = accpm( RrData, @risk_rrank2_par,[],[],boxConstr, lambda, Opt);
                     end
                 end
 
