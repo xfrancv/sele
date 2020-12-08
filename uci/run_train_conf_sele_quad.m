@@ -16,7 +16,8 @@ function Status = run_train_conf_sele_quad( dataSet, setting, trnData )
 
             Params = [];
             for lambda = [1 10 100 1000 ]
-                for batchSize = [50 100 500 1000]
+%                for batchSize = [50 100 500 1000]
+                for batchSize = [1000]
                     Params(end+1).lambda = lambda;
                     Params(end).batchSize = batchSize;
                 end
@@ -33,7 +34,8 @@ function Status = run_train_conf_sele_quad( dataSet, setting, trnData )
             
             Params = [];
             for lambda = [1 10 100 1000 ]
-                for batchSize = [50 100 500 1000]
+%                for batchSize = [50 100 500 1000]
+                for batchSize = [1000]
                     Params(end+1).lambda = lambda;
                     Params(end).batchSize = batchSize;
                 end
@@ -237,7 +239,7 @@ function Status = run_train_conf_sele_quad( dataSet, setting, trnData )
         nExamples = size( Data.X,2);
 
 
-        if ~exist( resultFile )       
+%        if ~exist( resultFile )       
 
             load( modelFile, 'W', 'T' );
 
@@ -266,7 +268,7 @@ function Status = run_train_conf_sele_quad( dataSet, setting, trnData )
             
             save( resultFile, 'tstAuc', 'tstLoss', 'valLoss','tstRiskCurve' );
             fprintf( 'results saved to: %s\n', resultFile);
-        end
+       % end
     end
 
     %% Conmpute AUC and RC-curve
@@ -292,13 +294,13 @@ function Status = run_train_conf_sele_quad( dataSet, setting, trnData )
 
     %%
 % 
-    figure;
-    plot(  [1:nTst]/nTst, tstRiskCurve );
-    hold on;
-    plot( [1:nTst]/nTst, mean( tstRiskCurve, 2), 'r', 'linewidth', 2);
-    xlabel('cover');
-    ylabel('err');
-    grid on;
+%     figure;
+%     plot(  [1:nTst]/nTst, tstRiskCurve );
+%     hold on;
+%     plot( [1:nTst]/nTst, mean( tstRiskCurve, 2), 'r', 'linewidth', 2);
+%     xlabel('cover');
+%     ylabel('err');
+%     grid on;
     
     return;
 end

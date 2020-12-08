@@ -3,17 +3,20 @@
 showLinear = 1;
 showQuad = 1;
 showMlp = 0;
+showSele2 = 1;
 
 dataSet = {{'california1', [100 500 1000 5000 6190] },...
            {'abalone1', [100 500 1000 1252] },...
            {'bank1',[100 500 1000 2000 2457]},...
            {'cpu1',[100 500 1000 2000 2454] },...
-           {'msd1',[100 500 1000 5000 10000]},...
            {'bikeshare1', [100 500 1000 5213] },...
            {'ccpp1', [100 500 1000 2872] },...
            {'facebook1',[100 500 1000 5000 10000]},...
            {'gpu1',[100 500 1000 5000 10000] },...
-           {'superconduct1',[100 500 1000 5000 6378]}};
+           {'superconduct1',[100 500 1000 5000 6378]},...
+           {'metro1',[100 500 1000 5000 10000] }};
+%           {'msd1',[100 500 1000 5000 10000]},...
+%           {'metro1',[100 500 1000 5000 10000] }};
            
 
 legendLoc = {
@@ -29,7 +32,7 @@ legendLoc = {
     'NorthWest'};
  
 
-COVER = 0.5;
+COVER = 0.9;
 Result = [];
 for d = 1 : numel( dataSet )
     
@@ -44,8 +47,14 @@ for d = 1 : numel( dataSet )
         Result{d}(end+1).name  = sprintf('sele(linear)');
         Result{d}(end).fname = sprintf('results/svorimc/%s/conf_sele1_linear_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
 
+        if showSele2
+            Result{d}(end+1).name  = sprintf('sele2(linear)');
+            Result{d}(end).fname = sprintf('results/svorimc/%s/conf_sele2_linear_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
+        end
+        
         Result{d}(end+1).name  = sprintf('reg(linear)') ;
         Result{d}(end).fname   = sprintf('results/svorimc/%s/conf_regression_linear_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
+        
     end
     
     if showMlp
@@ -59,6 +68,11 @@ for d = 1 : numel( dataSet )
     if showQuad
         Result{d}(end+1).name = sprintf('sele(quad)');
         Result{d}(end).fname  = sprintf('results/svorimc/%s/conf_sele1_quad_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
+        
+        if showSele2
+            Result{d}(end+1).name = sprintf('sele2(quad)');
+            Result{d}(end).fname  = sprintf('results/svorimc/%s/conf_sele2_quad_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
+        end
 
         Result{d}(end+1).name = sprintf('reg(quad)');
         Result{d}(end).fname  = sprintf('results/svorimc/%s/conf_regression_quad_zmuv1_trn%d/results.mat',dataSet{d}{1},dataSet{d}{2}(n));
@@ -187,7 +201,7 @@ for d = 1 : numel( dataSet )
             else
                 tstAuc(end+1) = inf;
             end
-        end    
+        end  
         [~,b] = min(tstAuc);
         str1{b} = [str1{b} sprintf('(BEST,auRc=%.3f)', min(tstAuc))];
         grid on;

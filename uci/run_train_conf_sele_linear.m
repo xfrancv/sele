@@ -5,7 +5,8 @@ function Status = run_train_conf_sele_linear( dataSet, setting, trnData )
 
     if nargin < 1
         dataSet = 'avila1';
-        setting = 'lr+sele3+zmuv';
+        setting = 'lr+sele2+zmuv';
+        trnData = 500;
     end
     
     [benchmark,riskType,zmuvNorm] = parse_sele_opt(setting);
@@ -19,7 +20,8 @@ function Status = run_train_conf_sele_linear( dataSet, setting, trnData )
             
             Params = [];
             for lambda = [1 10 100 1000 ]
-                for batchSize = [50 100 500 1000]
+%                for batchSize = [50 100 500 1000]
+                for batchSize = [1000]
                     Params(end+1).lambda = lambda;
                     Params(end).batchSize = batchSize;
                 end
@@ -35,7 +37,8 @@ function Status = run_train_conf_sele_linear( dataSet, setting, trnData )
             
             Params = [];
             for lambda = [1 10 100 1000 ]
-                for batchSize = [50 100 500 1000]
+%                for batchSize = [50 100 500 1000]
+                for batchSize = [1000]
                     Params(end+1).lambda = lambda;
                     Params(end).batchSize = batchSize;
                 end
@@ -46,7 +49,7 @@ function Status = run_train_conf_sele_linear( dataSet, setting, trnData )
     end
     
     %%
-    if nargin >= 3
+    if nargin >= 3 | exist( 'trnData', 'var' )
         Data = take_trn2_data( Data, trnData );
         outFolder = sprintf('%s/conf_sele%d_linear_zmuv%d_trn%.f/', rootFolder, riskType, zmuvNorm, trnData );
     else
@@ -241,7 +244,7 @@ function Status = run_train_conf_sele_linear( dataSet, setting, trnData )
         nExamples = size( Data.X, 2);
 
 
-        if ~exist( resultFile )       
+%        if exist( resultFile )       
 
             load( modelFile, 'W', 'T' );
 
@@ -270,7 +273,7 @@ function Status = run_train_conf_sele_linear( dataSet, setting, trnData )
 
             save( resultFile, 'tstAuc', 'tstRiskCurve', 'valLoss', 'tstLoss' );
             fprintf( 'results saved to: %s\n', resultFile);
-        end
+ %       end
     end
 
     %% Conmpute AUC and RC-curve

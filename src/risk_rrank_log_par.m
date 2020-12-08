@@ -1,4 +1,4 @@
-function [R,subgrad] = risk_rrank_par( Data, W )
+function [R,subgrad] = risk_rrank_log_par( Data, W )
 % RISK_HINGE Sum of hinge losses evaluating two-class linear classifier.
 % 
 % Synopsis:

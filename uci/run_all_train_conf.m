@@ -21,11 +21,11 @@ S = [];
 for i = 1 : numel( dataSet )
     for trnData = dataSet{i}{2}
 %        S{end+1} = run_train_conf_logistic_linear( dataSet{i}{1}, 'lr+zmuv', trnData);    
-        S{end+1} = run_train_conf_logistic_quad( dataSet{i}{1}, 'lr+zmuv', trnData);    
+%        S{end+1} = run_train_conf_logistic_quad( dataSet{i}{1}, 'lr+zmuv', trnData);    
 %        S{end+1} = run_train_conf_logistic_mlp( dataSet{i}{1}, 'lr+zmuv', trnData);    
 
 %        S{end+1} = run_train_conf_logistic_linear( dataSet{i}{1}, 'msvmlin+zmuv', trnData);    
-        S{end+1} = run_train_conf_logistic_quad( dataSet{i}{1}, 'msvmlin+zmuv', trnData);    
+%        S{end+1} = run_train_conf_logistic_quad( dataSet{i}{1}, 'msvmlin+zmuv', trnData);    
 %        S{end+1} = run_train_conf_logistic_mlp( dataSet{i}{1}, 'msvmlin+zmuv', trnData);    
     end
 end
@@ -33,21 +33,16 @@ end
 %% linear/quad/mlp conf rule trained on LR
 for i = 1 : numel( dataSet )
     for trnData = dataSet{i}{2}
-%        S{end+1} = run_train_conf_sele_linear( dataSet{i}{1}, 'lr+sele1+zmuv', trnData);    
-        S{end+1} = run_train_conf_sele_linear( dataSet{i}{1}, 'lr+sele2+zmuv', trnData);    
-        S{end+1} = run_train_conf_sele_linear( dataSet{i}{1}, 'lr+sele3+zmuv', trnData);    
+%         S{end+1} = run_train_conf_sele_linear( dataSet{i}{1}, 'lr+sele1+zmuv', trnData);    
+%         S{end+1} = run_train_conf_sele_linear( dataSet{i}{1}, 'lr+sele2+zmuv', trnData);    
+%         S{end+1} = run_train_conf_sele_linear( dataSet{i}{1}, 'lr+sele3+zmuv', trnData);    
 
         S{end+1} = run_train_conf_sele_quad( dataSet{i}{1}, 'lr+sele1+zmuv', trnData);    
-%        S{end+1} = run_train_conf_sele_mlp( dataSet{i}{1}, 'lr+sele1+zmuv', trnData);    
-%        S{end+1} = run_train_conf_sele_mlp( dataSet{i}{1}, 'lr+sele2+zmuv', trnData);    
 
-%        S{end+1} = run_train_conf_sele_linear( dataSet{i}{1}, 'msvmlin+sele1+zmuv', trnData);    
-        S{end+1} = run_train_conf_sele_linear( dataSet{i}{1}, 'msvmlin+sele2+zmuv', trnData);    
-        S{end+1} = run_train_conf_sele_linear( dataSet{i}{1}, 'msvmlin+sele3+zmuv', trnData);    
-
+%         S{end+1} = run_train_conf_sele_linear( dataSet{i}{1}, 'msvmlin+sele1+zmuv', trnData);    
+%         S{end+1} = run_train_conf_sele_linear( dataSet{i}{1}, 'msvmlin+sele2+zmuv', trnData);    
+%         S{end+1} = run_train_conf_sele_linear( dataSet{i}{1}, 'msvmlin+sele3+zmuv', trnData);    
         S{end+1} = run_train_conf_sele_quad( dataSet{i}{1}, 'msvmlin+sele1+zmuv', trnData);    
-%        S{end+1} = run_train_conf_sele_mlp( dataSet{i}{1}, 'msvmlin+sele1+zmuv', trnData);    
-%        S{end+1} = run_train_conf_sele_mlp( dataSet{i}{1}, 'msvmlin+sele2+zmuv', trnData);    
     end
 end
 
